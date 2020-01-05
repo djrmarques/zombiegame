@@ -11,9 +11,9 @@ object Ash {
   private var _obY = 0
 
   def x: Int = _x
-  def x_= (newValue: Int) = _x = newValue
+  def x_(newValue: Int) = _x = newValue
   def obX: Int = _obX
-  def obX_ = (newValue: Int) = _obX = newValue
+  def obX_(newValue: Int) = _obX = newValue
 
   def y: Int = _y
   def y_= (newValue: Int) = _y = newValue
