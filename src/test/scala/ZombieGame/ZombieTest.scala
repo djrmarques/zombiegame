@@ -18,4 +18,10 @@ class ZombieTest extends FunSuite {
     assert(zombie.target == (1, 3))
   }
 
+  test("testGetNearestHuman3") {
+    val zombie = new Zombie(0, 3, 5)
+    zombie.getNearestHuman(humansList)
+    assert(zombie.target == (1, 3))
+  }
+
 }

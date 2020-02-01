@@ -2,22 +2,7 @@ package ZombieGame
 
 import scala.math.sqrt
 
-// Base trait for the human and zombie npc classes
-trait NPC {
-
-  var x: Int
-  var y: Int
-  var isDead: Boolean
-  val id: Int
-
-  def getDistance(p: (Int, Int)): Int = {
-    val dX: Int = x - p._1
-    val dY: Int = y - p._2
-    sqrt(dX*dX + dY*dY).toInt
-  }
-}
-
-class Zombie(val id: Int, startingX: Int, startingY: Int) extends NPC {
+class Zombie(val id: Int, startingX: Int, startingY: Int) {
   private var _x = startingX
   private var _y = startingY
   private var _isDead = false
@@ -56,6 +41,12 @@ class Zombie(val id: Int, startingX: Int, startingY: Int) extends NPC {
     ???
   }
 
+  def getDistance(p: (Int, Int)): Int = {
+    val dX: Int = x - p._1
+    val dY: Int = y - p._2
+    sqrt(dX*dX + dY*dY).toInt
+  }
+
   // If less than 2000 units from Ash, die
   def distanceToAsh = {
     ???
@@ -63,8 +54,6 @@ class Zombie(val id: Int, startingX: Int, startingY: Int) extends NPC {
 }
 
 
-class Human(val id: Int, startingX: Int, startingY: Int) extends NPC {
-  var x: Int  = startingX
-  var y: Int  = startingY
+class Human(val id: Int, val x: Int, val y: Int) {
   var isDead = false
 }
