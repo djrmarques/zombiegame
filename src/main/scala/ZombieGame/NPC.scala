@@ -2,11 +2,12 @@ package ZombieGame
 
 import scala.math.sqrt
 
-// Definition of Zombie and Human classes
+// Base trait for the human and zombie npc classes
 trait NPC {
 
-  val x: Int
-  val y: Int
+  var x: Int
+  var y: Int
+  var isDead: Boolean
   val id: Int
 
   def getDistance(p: (Int, Int)): Int = {
@@ -14,11 +15,56 @@ trait NPC {
     val dY: Int = y - p._2
     sqrt(dX*dX + dY*dY).toInt
   }
-
-  protected val distance: Int = getDistance((Ash.x, Ash.y))
 }
 
-class Zombie(val id: Int, val x: Int, val y: Int, humans: List[(Int, Int)]) extends NPC {}
-class Human(val id: Int, val x: Int, val y: Int, ) extends NPC {}
+class Zombie(val id: Int, startingX: Int, startingY: Int) extends NPC {
+  private var _x = startingX
+  private var _y = startingY
+  private var _isDead = false
+  private var _target = (0, 0)
+
+  def x: Int  = _x
+  def y: Int  = _y
+  def isDead: Boolean  = _isDead
+  def target: (Int, Int)  = _target
+
+  val stepSize = 400
+
+  // Setter methods for the positions
+  def x_(x: Int) = _x = x
+  def y_(y: Int) = _y = y
+
+  // Turn the isDead attribute to true
+  def kill = _isDead = true
+
+  // Get current position
+  def getPost: (Int, Int) = (x, y)
+
+  // Changes the target based on the nearest human position
+  def getNearestHuman(humanList: List[(Int, Int)]) = {
+    val distances = (humanList map (getDistance(_))) zip humanList
+    _target = (distances minBy (_._1))._2 // Assign the nearest human to the target
+  }
+
+  // Move in direction of the nearest target
+  def moveToTarget = {
+    ???
+  }
+
+  // Move towards the nearest human and change the coordinates accordingly
+  def move = {
+    ???
+  }
+
+  // If less than 2000 units from Ash, die
+  def distanceToAsh = {
+    ???
+  }
+}
 
 
+class Human(val id: Int, startingX: Int, startingY: Int) extends NPC {
+  var x: Int  = startingX
+  var y: Int  = startingY
+  var isDead = false
+}
