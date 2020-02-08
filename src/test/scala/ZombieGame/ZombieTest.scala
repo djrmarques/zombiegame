@@ -5,11 +5,11 @@ import scala.math._
 
 class ZombieTest extends FunSuite {
 
-  val humansList: List[Human] = List(
-    new Human(0, 1, 1),
-    new Human(1, 2, 3),
-    new Human(2, 4, 5),
-  )
+    val humansList: List[Human] = List(
+      new Human(0, 1, 1),
+      new Human(1, 2, 3),
+      new Human(2, 4, 5),
+    )
 
   test("testGetAsheDistance1") {
     val zombie = new Zombie(0, 0, 0)
@@ -48,11 +48,15 @@ class ZombieTest extends FunSuite {
     val zombie = new Zombie(0, 4, 4)
     zombie.updateDistancesAndTarget(humansList)
     zombie.moveToTarget
-    println("Target Coords: ", zombie.target)
-    println("Distance to Target: ", zombie.distanceToTarget)
-    println("TargetAsh: ", zombie.targetAsh)
-    zombie.moveToTarget
+
+    // Assert that the location changed
     assert(zombie.location == (4, 5))
+
+    // Assert that one of the humans died
+    val deadHumanLocations = humansList filter (_.isDead) map (_.location)
+
+    assert(deadHumanLocations.contains((4, 5)))
+
   }
 
   test("testMoveToTarget2"){
