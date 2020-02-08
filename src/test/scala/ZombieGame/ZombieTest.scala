@@ -51,25 +51,19 @@ class ZombieTest extends FunSuite {
 
     // Assert that the location changed
     assert(zombie.location == (4, 5))
-
-    // Assert that one of the humans died
-    val deadHumanLocations = humansList filter (_.isDead) map (_.location)
-
-    assert(deadHumanLocations.contains((4, 5)))
-
   }
 
   test("testMoveToTarget2"){
-    val zombie = new Zombie(0, 200, 1000)
+    val initialX = 200
+    val initialY = 1000
+    val zombie = new Zombie(0, initialX, initialY)
     Ash.setLocation(100, 50)
     zombie.updateDistancesAndTarget(humansList)
-    val oldX = zombie.x
-    val oldY = zombie.y
     zombie.moveToTarget
     assert(zombie.targetAsh)
 
-    val dx = oldX-zombie.x
-    val dy = oldY-zombie.y
+    val dx = initialX-zombie.x
+    val dy = initialY-zombie.y
     val distanceTraveled = sqrt(dx*dx + dy*dy)
     assert(abs(distanceTraveled - zombie.stepSize) < 1)
   }

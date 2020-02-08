@@ -2,7 +2,7 @@ package ZombieGame
 
 import scala.math._
 
-class Zombie(val id: Int, startingX: Int, startingY: Int) {
+class Zombie(val id: Int, startingX: Int, startingY: Int)  extends Movement  {
   private var _x = startingX
   private var _y = startingY
   private var _isDead = false
@@ -13,7 +13,6 @@ class Zombie(val id: Int, startingX: Int, startingY: Int) {
   private var _target = (0, 0)
 
   def x: Int = _x
-
   def y: Int = _y
 
   def distanceToAsh: Double = _distanceToAsh
@@ -56,11 +55,6 @@ class Zombie(val id: Int, startingX: Int, startingY: Int) {
     }
   }
 
-  def getDistance(p: (Int, Int)): Double = {
-    val dX: Int = x - p._1
-    val dY: Int = y - p._2
-    sqrt(dX * dX + dY * dY)
-  }
 
   // If less than 2000 units from Ash, die
   def getDistanceToAsh = {
@@ -71,24 +65,6 @@ class Zombie(val id: Int, startingX: Int, startingY: Int) {
   def updateDistancesAndTarget(humanList: List[Human]): Unit = {
     getDistanceToAsh
     getNearestHuman(humanList)
-  }
-
-  // Move in direction of the nearest target
-  def moveToTarget = {
-    // Check if distance is near enough to the target
-    if (distanceToTarget <= stepSize && !targetAsh) {
-      _x = target._1
-      _y = target._2
-      _targetHuman.kill // Kill the human
-    }
-    else if (distanceToTarget > stepSize) {
-      val distanceRatio = stepSize/distanceToTarget
-      _x = round((1-distanceRatio)*x + distanceRatio*target._1).toInt
-      _y = round((1-distanceRatio)*y + distanceRatio*target._2).toInt
-    }
-    else {
-      throw new Exception("The zombie should not be able to kill Ash")
-    }
   }
 
 }
@@ -102,6 +78,4 @@ class Human(val id: Int, val x: Int, val y: Int) {
   def location = (x, y)
 
   def kill = _isDead = true
-
-
 }
