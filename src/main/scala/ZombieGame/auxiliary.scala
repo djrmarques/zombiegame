@@ -45,7 +45,7 @@ trait Movement {
 trait generation {
   val r = new Random(32) // Remove seed later
   def randomGenerateCoordinates(n: Int): List[(Int, Int, Int)] = {
-    ((0 until n) map ((_, r.between(0, ZombieGame.mapWidth-1), r.between(0, ZombieGame.mapHeight-1)))).toList
+    ((0 until n) map ((_, r.between(0, mapWidth), r.between(0, mapHeight)))).toList
   }
 
   def customGenerateCoordinates(coordsList: List[(Int, Int)]): List[(Int, Int, Int)] ={
