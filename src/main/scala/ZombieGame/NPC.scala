@@ -67,6 +67,7 @@ class Zombie(val id: Int, startingX: Int, startingY: Int) {
     _distanceToAsh = getDistance(Ash.location)
   }
 
+  // Run the update on the distances for the human list and Ash
   def updateDistancesAndTarget(humanList: List[Human]): Unit = {
     getDistanceToAsh
     getNearestHuman(humanList)
@@ -91,9 +92,8 @@ class Zombie(val id: Int, startingX: Int, startingY: Int) {
       }
     }
     else {
-      throw new Exception("This should not be happening")
+      throw new Exception("The zombie should not be able to kill Ash")
     }
-
   }
 
 }
