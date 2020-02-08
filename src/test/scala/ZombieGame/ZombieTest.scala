@@ -56,14 +56,19 @@ class ZombieTest extends FunSuite {
   }
 
   test("testMoveToTarget2"){
-    val zombie = new Zombie(0, 200, 500)
+    val zombie = new Zombie(0, 200, 1000)
     Ash.setLocation(100, 50)
     zombie.updateDistancesAndTarget(humansList)
-    zombie.moveToTarget
-    println("Target Coords: ", zombie.target)
-    println("Distance to Target: ", zombie.distanceToTarget)
-    println("TargetAsh: ", zombie.targetAsh)
+    val oldX = zombie.x
+    val oldY = zombie.y
     zombie.moveToTarget
     assert(zombie.targetAsh)
+
+    val dx = oldX-zombie.x
+    val dy = oldY-zombie.y
+    val distanceTraveled = sqrt(dx*dx + dy*dy)
+    assert(abs(distanceTraveled - zombie.stepSize) < 1)
   }
+
+
 }
