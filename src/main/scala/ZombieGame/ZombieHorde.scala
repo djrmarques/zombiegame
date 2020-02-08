@@ -1,7 +1,6 @@
 package ZombieGame
 
-import scala.math._
-
+// Zombie class
 class Zombie(val id: Int, startingX: Int, startingY: Int)  extends Movement  {
   private var _x = startingX
   private var _y = startingY
@@ -69,13 +68,7 @@ class Zombie(val id: Int, startingX: Int, startingY: Int)  extends Movement  {
 
 }
 
-
-class Human(val id: Int, val x: Int, val y: Int) {
-  private var _isDead = false
-
-  def isDead = _isDead
-
-  def location = (x, y)
-
-  def kill = _isDead = true
+// The horde of zombies. Contains methods for generating the zombies and manipulating all the zombies
+object ZombieHorde {
+???
 }
