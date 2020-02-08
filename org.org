@@ -1,0 +1,7 @@
+* Create the NPC classes
+** Human
+** Zombie
+*** TODO Move in the directoin of a given target for the maximum distance
+***
+
+* Finish Ash class

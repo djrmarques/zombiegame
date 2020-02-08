@@ -2,3 +2,5 @@
 /project/
 /.idea/
 /*.sc
+/src/main/scala/ZombieGame/test.sc
+/scriptFile.scala
