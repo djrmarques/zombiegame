@@ -4,24 +4,35 @@ import org.scalatest.FunSuite
 
 class ZombieTest extends FunSuite {
 
-  val humansList: List[(Int, Int)] = List((1, 3), (0, 0))
+  val humansList: List[Human] = List(
+    new Human(0, 1, 1),
+    new Human(1, 2, 3),
+    new Human(2, 4, 5),
+  )
 
   test("testGetNearestHuman1") {
     val zombie = new Zombie(0, 1, 1)
-    zombie.getNearestHuman(humansList)
-    assert(zombie.target == (0, 0))
+    zombie.updateDistancesAndTarget(humansList)
+    assert(zombie.target == (1, 1))
   }
 
   test("testGetNearestHuman2") {
-    val zombie = new Zombie(0, 1, 2)
-    zombie.getNearestHuman(humansList)
-    assert(zombie.target == (1, 3))
+    val zombie = new Zombie(0, 2, 2)
+    zombie.updateDistancesAndTarget(humansList)
+    println("Distance to Ash: ", zombie.distanceToAsh)
+    println("Distance to target: ", zombie.distanceToTarget)
+    assert(zombie.target == (2, 3))
   }
 
   test("testGetNearestHuman3") {
     val zombie = new Zombie(0, 3, 5)
-    zombie.getNearestHuman(humansList)
-    assert(zombie.target == (1, 3))
+    zombie.updateDistancesAndTarget(humansList)
+    assert(zombie.target == (4, 5))
   }
 
+  test("testGetNearestHuman4") {
+    val zombie = new Zombie(0, 4, 5)
+    zombie.updateDistancesAndTarget(humansList)
+    assert(zombie.target == (4, 5))
+  }
 }
