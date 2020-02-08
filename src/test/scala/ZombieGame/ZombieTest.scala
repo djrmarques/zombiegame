@@ -1,6 +1,7 @@
 package ZombieGame
 
 import org.scalatest.FunSuite
+import scala.math._
 
 class ZombieTest extends FunSuite {
 
@@ -9,6 +10,13 @@ class ZombieTest extends FunSuite {
     new Human(1, 2, 3),
     new Human(2, 4, 5),
   )
+
+  test("testGetAsheDistance1") {
+    val zombie = new Zombie(0, 0, 0)
+    Ash.setLocation(10, 10)
+    zombie.getDistanceToAsh
+    assert(zombie.distanceToAsh == sqrt(200))
+  }
 
   test("testGetNearestHuman1") {
     val zombie = new Zombie(0, 1, 1)
