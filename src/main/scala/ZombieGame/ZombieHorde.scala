@@ -70,5 +70,14 @@ class Zombie(val id: Int, startingX: Int, startingY: Int)  extends Movement  {
 
 // The horde of zombies. Contains methods for generating the zombies and manipulating all the zombies
 object ZombieHorde {
-???
+  // Radomly crete n zombies
+  def randomCreateHorde(n: Int): List[Zombie] = {
+    ???
+  }
+
+
+  /// Creates an horde of zombies by passing a list coordinates
+  def customCreateHord(listCoords: List[(Int, Int)]) = {
+    ???
+  }
 }

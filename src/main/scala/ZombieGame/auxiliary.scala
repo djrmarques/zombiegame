@@ -1,7 +1,9 @@
 package ZombieGame
 
 import scala.math.{sqrt, round}
+import scala.util.Random
 
+/* Movement trait, Used by each zombie and by Ash */
 // Holds methods related to movement calculation
 trait Movement {
 
@@ -38,3 +40,15 @@ trait Movement {
   }
 }
 
+/* Population Generation Trait, Used by each ZombieHord and HumanPopulation */
+
+trait generation {
+  val r = new Random(32) // Remove seed later
+  def randomGenerateCoordinates(n: Int): List[(Int, Int, Int)] = {
+    ((0 until n) map ((_, r.between(0, ZombieGame.mapWidth-1), r.between(0, ZombieGame.mapHeight-1)))).toList
+  }
+
+  def customGenerateCoordinates(coordsList: List[(Int, Int)]): List[(Int, Int, Int)] ={
+    (for (i <- 0 until coordsList.length; (x, y) <- coordsList) yield (i, x, y)).toList
+  }
+}
