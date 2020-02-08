@@ -82,14 +82,9 @@ class Zombie(val id: Int, startingX: Int, startingY: Int) {
       _targetHuman.kill // Kill the human
     }
     else if (distanceToTarget > stepSize) {
-      val dx = x - target._1
-      val dy = y - target._2
-      if (dx < 0) {
-        val angle = atan(dy / dx)
-      }
-      else {
-        val angle = atan(1)
-      }
+      val distanceRatio = stepSize/distanceToTarget
+      _x = round((1-distanceRatio)*x + distanceRatio*target._1).toInt
+      _y = round((1-distanceRatio)*y + distanceRatio*target._2).toInt
     }
     else {
       throw new Exception("The zombie should not be able to kill Ash")
