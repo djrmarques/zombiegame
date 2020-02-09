@@ -14,12 +14,12 @@ object ZombieGame extends App {
   val outputFileName = timeFormater.format(now)
   val outputFilePath = outputFileFolder + "/" + outputFileName + ".txt"
 
-  // Initialize Ash position
-  Ash.setLocation(0, 0)
-
-  // Initialize the Human and Zombie population
-  ZombieHorde.generatePopulation(5)
-  HumanPopulation.generatePopulation(5)
+  /* Initialize the game instance randomly */
+  def randomInitializeInstance(nHumans: Int, nZombies: Int): Unit ={
+    // Initialize the Human and Zombie population
+    ZombieHorde.generatePopulation(nHumans)
+    HumanPopulation.generatePopulation(nZombies)
+  }
 
   // Start game loop
   var nTurn = 1
