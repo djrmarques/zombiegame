@@ -1,41 +1,19 @@
 package ZombieGame
 
 // Zombie class
-class Zombie(val id: Int, startingX: Int, startingY: Int)  extends Movement  {
-  private var _x = startingX
-  private var _y = startingY
-  private var _isDead = false
-  private var _distanceToTarget = 0.0
+class Zombie(id: Int, _x: Int, _y: Int) extends NPC (id: Int, _x: Int, _y: Int) with Movement {
   private var _distanceToAsh = 0.0
+  private var _distanceToTarget: Double = 0.0
   private var _targetAsh: Boolean = false
   private var _targetHuman: Human = new Human(-1, 0, 0)
   private var _target = (0, 0)
 
-  def x: Int = _x
-  def y: Int = _y
-
   def distanceToAsh: Double = _distanceToAsh
-
   def targetAsh: Boolean = _targetAsh
-
   def distanceToTarget: Double = _distanceToTarget
-
-  def isDead: Boolean = _isDead
-
   def target: (Int, Int) = _target
 
   val stepSize = 400
-
-  // Setter methods for the positions
-  def x_(x: Int) = _x = x
-
-  def y_(y: Int) = _y = y
-
-  // Turn the isDead attribute to true
-  def kill = _isDead = true
-
-  // Get current position
-  def location: (Int, Int) = (x, y)
 
   // Changes the target based on the nearest human position
   def getNearestHuman(humanList: List[Human]) = {
@@ -69,15 +47,12 @@ class Zombie(val id: Int, startingX: Int, startingY: Int)  extends Movement  {
 }
 
 // The horde of zombies. Contains methods for generating the zombies and manipulating all the zombies
-object ZombieHorde {
-  // Radomly crete n zombies
-  def randomCreateHorde(n: Int): List[Zombie] = {
-    ???
+object ZombieHorde extends generation{
+  var population: List[Zombie] = List()
+
+  def generatePopulation(n: Int)= {
+    val coords = randomGenerateCoordinates(n)
+    population = coords map ((p: (Int, Int, Int)) => new Zombie(p._1, p._2, p._3))
   }
 
-
-  /// Creates an horde of zombies by passing a list coordinates
-  def customCreateHord(listCoords: List[(Int, Int)]) = {
-    ???
-  }
 }
