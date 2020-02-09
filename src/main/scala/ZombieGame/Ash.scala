@@ -5,6 +5,11 @@ object Ash extends Movement {
   private var _y = 0
   private var _target = (0, 0)
   private var _distanceToTarget = 0.0
+  private var _score: Long = 0
+
+  def score: Long = _score
+
+  def incrementScore(v: Long) = {_score += v}
 
   val stepSize: Int = 1000
   val attackRange: Int = 2000
