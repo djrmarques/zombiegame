@@ -1,14 +1,14 @@
 package ZombieGame
 
 // Human class
-class Human(id: Int, _x: Int, _y: Int) extends NPC(id: Int, _x: Int, _y: Int){}
+class Human(id: Int, startingX: Int, startingY: Int) extends NPC(id: Int, startingX: Int, startingY: Int){
+  override def x_(newX: Int): Unit = println("Cant change location on humans")
+  override def y_(newY: Int): Unit = println("Cant change location on humans")
+}
 
 // Generate the Human population
-object HumanPopulation extends generation {
-  var population: List[Human] = List()
-
+object HumanPopulation extends Generation {
   def generatePopulation(n: Int)= {
-    val coords = randomGenerateCoordinates(n)
-    population = coords map ((p: (Int, Int, Int)) => new Human(p._1, p._2, p._3))
+    setPopulation(randomGenerateCoordinates(n) map ((p: (Int, Int, Int)) => new Human(p._1, p._2, p._3)))
   }
 }

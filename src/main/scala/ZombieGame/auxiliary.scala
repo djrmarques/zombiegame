@@ -40,19 +40,25 @@ trait Movement {
   }
 }
 /* NPC trait. Trait with the attributes shared between the zombies and humans*/
-class NPC(val id: Int, _x: Int, _y: Int) {
+class NPC(val id: Int, startingX: Int, startingY: Int) {
+  private var _x: Int = startingX
+  private var _y: Int = startingY
   private var _isDead = false
   def isDead: Boolean =  _isDead
   def x: Int = _x
   def y: Int = _y
   def kill = _isDead = true
+  def x_(newX: Int) = _x = newX
+  def y_(newY: Int) = _y = newY
   // Get current position
   def location: (Int, Int) = (x, y)
 }
 
 /* Population Generation Trait, Used by each ZombieHord and HumanPopulation */
-trait generation {
-  var population: List[NPC]
+class Generation {
+  private var _population: List[NPC] = List()
+  def population: List[NPC] = _population
+  def setPopulation(newPopulation: List[NPC]) = {_population = newPopulation}
   def nDead: Int =  (population filter (_.isDead)).length
   def nAlive: Int =  (population filter (!_.isDead)).length
   def anyAlive: Boolean = nAlive > 0

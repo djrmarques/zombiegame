@@ -47,12 +47,8 @@ class Zombie(id: Int, _x: Int, _y: Int) extends NPC (id: Int, _x: Int, _y: Int) 
 }
 
 // The horde of zombies. Contains methods for generating the zombies and manipulating all the zombies
-object ZombieHorde extends generation{
-  var population: List[Zombie] = List()
-
+object ZombieHorde extends Generation{
   def generatePopulation(n: Int)= {
-    val coords = randomGenerateCoordinates(n)
-    population = coords map ((p: (Int, Int, Int)) => new Zombie(p._1, p._2, p._3))
+    setPopulation(randomGenerateCoordinates(n) map ((p: (Int, Int, Int)) => new Zombie(p._1, p._2, p._3)))
   }
-
 }
