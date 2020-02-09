@@ -63,7 +63,7 @@ class Generation {
   def nAlive: Int =  (population filter (!_.isDead)).length
   def anyAlive: Boolean = nAlive > 0
 
-  def allCords: List[(Int, Int)] = population filter (!_.isDead) map (_.location)
+  def allCords: List[(Int, Int, Int)] = population filter (!_.isDead) map (_.descriptor)
 
   val r = new Random() // Remove seed later
   def randomGenerateCoordinates(n: Int): List[(Int, Int, Int)] = {
