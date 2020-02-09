@@ -62,12 +62,14 @@ class Generation {
   def nAlive: Int =  (population filter (!_.isDead)).length
   def anyAlive: Boolean = nAlive > 0
 
-  val r = new Random(32) // Remove seed later
+  def allCords: List[(Int, Int)] = population map (_.location)
+
+  val r = new Random() // Remove seed later
   def randomGenerateCoordinates(n: Int): List[(Int, Int, Int)] = {
     ((0 until n) map ((_, r.between(0, mapWidth), r.between(0, mapHeight)))).toList
   }
 
   def customGenerateCoordinates(coordsList: List[(Int, Int)]): List[(Int, Int, Int)] ={
-    (for (i <- 0 until coordsList.length; (x, y) <- coordsList) yield (i, x, y)).toList
+    ((0 until coordsList.length) zip coordsList).toList map (v => (v._1, v._2._1, v._2._2))
   }
 }

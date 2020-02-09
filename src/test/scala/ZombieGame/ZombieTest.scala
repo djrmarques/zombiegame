@@ -70,5 +70,9 @@ class ZombieTest extends FunSuite with BeforeAndAfter {
     assert(abs(distanceTraveled - zombie.stepSize) < 1)
   }
 
+  test("moveAllZombies"){
+    ZombieHorde.customGeneratePopulation(List((10, 10), (15, 15), (5, 5)))
+    assert(ZombieHorde.population.length == 3)
+  }
 
 }
