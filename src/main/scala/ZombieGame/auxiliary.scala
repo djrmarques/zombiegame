@@ -52,6 +52,7 @@ class NPC(val id: Int, startingX: Int, startingY: Int) {
   def y_(newY: Int) = _y = newY
   // Get current position
   def location: (Int, Int) = (x, y)
+  def descriptor: (Int, Int ,Int) = (id, x, y)
 }
 
 /* Population Generation Trait, Used by each ZombieHorde and HumanPopulation */
@@ -62,7 +63,7 @@ class Generation {
   def nAlive: Int =  (population filter (!_.isDead)).length
   def anyAlive: Boolean = nAlive > 0
 
-  def allCords: List[(Int, Int)] = population map (_.location)
+  def allCords: List[(Int, Int)] = population filter (!_.isDead) map (_.location)
 
   val r = new Random() // Remove seed later
   def randomGenerateCoordinates(n: Int): List[(Int, Int, Int)] = {

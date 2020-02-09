@@ -72,7 +72,9 @@ class ZombieTest extends FunSuite with BeforeAndAfter {
 
   test("moveAllZombies"){
     ZombieHorde.customGeneratePopulation(List((10, 10), (15, 15), (5, 5)))
-    assert(ZombieHorde.population.length == 3)
+    val oldLocation = ZombieHorde.allCords
+    ZombieHorde.moveZombies
+    assert(ZombieHorde.allCords != oldLocation)
   }
 
 }

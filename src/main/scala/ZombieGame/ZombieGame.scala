@@ -1,6 +1,12 @@
 package ZombieGame
+import java.io.File
 
 object ZombieGame extends App {
+
+  /* Check if exists and create the folder to save the output */
+  val outputFile = new File(logOutputPath)
+  if (!outputFile.exists()) outputFile.mkdir()
+  outputFile.clo
 
   // Initialize Ash position
   Ash.setLocation(0, 0)
@@ -17,11 +23,9 @@ object ZombieGame extends App {
     println("Ashe Location")
     println(Ash.location)
 
-    println("Human Locations")
-    println(HumanPopulation.allCords)
-
     println("Zombie Locations")
     println(ZombieHorde.allCords)
+    ZombieHorde.moveZombies
     nTurn +=1
   }
 }
