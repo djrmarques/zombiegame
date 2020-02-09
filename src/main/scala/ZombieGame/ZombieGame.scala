@@ -1,12 +1,18 @@
 package ZombieGame
 import java.io.File
+import java.util.Calendar
+import java.text.SimpleDateFormat
 
 object ZombieGame extends App {
 
   /* Check if exists and create the folder to save the output */
-  val outputFile = new File(logOutputPath)
-  if (!outputFile.exists()) outputFile.mkdir()
-  outputFile.clo
+  val outputFileFolder = new File(logOutputPath)
+  if (!outputFileFolder.exists()) outputFileFolder.mkdir()
+  val now = Calendar.getInstance.getTime
+  val dateFormat = "yyyy-MM-dd_hh-mm-ss"
+  val timeFormater = new SimpleDateFormat(dateFormat)
+  val outputFileName = timeFormater.format(now)
+  val outputFilePath = outputFileFolder + "/" + outputFileName + ".txt"
 
   // Initialize Ash position
   Ash.setLocation(0, 0)
