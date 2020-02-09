@@ -54,11 +54,10 @@ class NPC(val id: Int, startingX: Int, startingY: Int) {
   def location: (Int, Int) = (x, y)
 }
 
-/* Population Generation Trait, Used by each ZombieHord and HumanPopulation */
+/* Population Generation Trait, Used by each ZombieHorde and HumanPopulation */
 class Generation {
   private var _population: List[NPC] = List()
   def population: List[NPC] = _population
-  def setPopulation(newPopulation: List[NPC]) = {_population = newPopulation}
   def nDead: Int =  (population filter (_.isDead)).length
   def nAlive: Int =  (population filter (!_.isDead)).length
   def anyAlive: Boolean = nAlive > 0

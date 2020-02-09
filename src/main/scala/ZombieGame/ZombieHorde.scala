@@ -5,7 +5,7 @@ class Zombie(id: Int, _x: Int, _y: Int) extends NPC (id: Int, _x: Int, _y: Int) 
   private var _distanceToAsh = 0.0
   private var _distanceToTarget: Double = 0.0
   private var _targetAsh: Boolean = false
-  private var _targetHuman: Human = new Human(-1, 0, 0)
+  private var _targetHuman: NPC = new Human(-1, 0, 0)
   private var _target = (0, 0)
 
   def distanceToAsh: Double = _distanceToAsh
@@ -16,9 +16,9 @@ class Zombie(id: Int, _x: Int, _y: Int) extends NPC (id: Int, _x: Int, _y: Int) 
   val stepSize = 400
 
   // Changes the target based on the nearest human position
-  def getNearestHuman(humanList: List[Human]) = {
-    val distances = (humanList filter (!_.isDead) map (h => getDistance((h.location)))) zip humanList
-    val minDistance = (distances minBy (_._1))
+  def getNearestHuman = {
+    val d = (HumanPopulation.population filter (!_.isDead) map (h => getDistance((h.location)))) zip HumanPopulation.population
+    val minDistance = (d minBy (_._1))
 
     if (_distanceToAsh < minDistance._1) {
       _target = Ash.location
@@ -39,16 +39,23 @@ class Zombie(id: Int, _x: Int, _y: Int) extends NPC (id: Int, _x: Int, _y: Int) 
   }
 
   // Run the update on the distances for the human list and Ash
-  def updateDistancesAndTarget(humanList: List[Human]): Unit = {
+  def updateDistancesAndTarget: Unit = {
     getDistanceToAsh
-    getNearestHuman(humanList)
+    getNearestHuman
   }
 
 }
 
 // The horde of zombies. Contains methods for generating the zombies and manipulating all the zombies
 object ZombieHorde extends Generation{
+  private var _population: List[Zombie] = List()
+  override def population: List[Zombie] = _population
+  def setPopulation(newPopulation: List[Zombie]) = {_population = newPopulation}
+
   def generatePopulation(n: Int)= {
     setPopulation(randomGenerateCoordinates(n) map ((p: (Int, Int, Int)) => new Zombie(p._1, p._2, p._3)))
   }
+
+  // Make all zombies move
+  def moveZombies = for (z:Zombie <- population) {z.updateDistancesAndTarget; z.moveToTarget}
 }
