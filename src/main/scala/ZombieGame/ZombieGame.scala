@@ -5,15 +5,6 @@ import java.text.SimpleDateFormat
 
 object ZombieGame extends App {
 
-  /* Check if exists and create the folder to save the output */
-  val outputFileFolder = new File(logOutputPath)
-  if (!outputFileFolder.exists()) outputFileFolder.mkdir()
-  val now = Calendar.getInstance.getTime
-  val dateFormat = "yyyy-MM-dd_hh-mm-ss"
-  val timeFormater = new SimpleDateFormat(dateFormat)
-  val outputFileName = timeFormater.format(now)
-  val outputFilePath = outputFileFolder + "/" + outputFileName + ".txt"
-
   /* Initialize the game instance randomly */
   def randomInitializeInstance(nHumans: Int, nZombies: Int): Unit ={
     // Initialize the Human and Zombie population
@@ -21,17 +12,29 @@ object ZombieGame extends App {
     HumanPopulation.generatePopulation(nZombies)
   }
 
-  // Start game loop
-  var nTurn = 1
-  while (nTurn < 10) {
-    println("Turn: ", nTurn)
+  def main() {
+    /* Check if exists and create the folder to save the output */
+    val outputFileFolder = new File(logOutputPath)
+    if (!outputFileFolder.exists()) outputFileFolder.mkdir()
+    val now = Calendar.getInstance.getTime
+    val dateFormat = "yyyy-MM-dd_hh-mm-ss"
+    val timeFormater = new SimpleDateFormat(dateFormat)
+    val outputFileName = timeFormater.format(now)
+    val outputFilePath = outputFileFolder + "/" + outputFileName + ".txt"
 
-    println("Ashe Location")
-    println(Ash.location)
 
-    println("Zombie Locations")
-    println(ZombieHorde.allCords)
-    ZombieHorde.moveZombies
-    nTurn +=1
+    // Holder for the status of the game for each turn, in csv format
+    var statusPerTurn = List()
+
+    var nTurn = 0
+    // Start turn 0
+
+    // Start game loop
+    while (nTurn < 10) {
+      nTurn += 1
+      ZombieHorde.moveZombies
+
+      // Save the Game status into the log file
+    }
   }
 }

@@ -30,6 +30,7 @@ class Zombie(id: Int, _x: Int, _y: Int) extends NPC (id: Int, _x: Int, _y: Int) 
       _targetAsh = false
       _targetHuman = minDistance._2
     }
+
   }
 
 
@@ -44,6 +45,7 @@ class Zombie(id: Int, _x: Int, _y: Int) extends NPC (id: Int, _x: Int, _y: Int) 
     getNearestHuman
   }
 
+  override def status = Map(id -> Map("location" -> location, "target" -> target))
 }
 
 // The horde of zombies. Contains methods for generating the zombies and manipulating all the zombies
@@ -62,4 +64,5 @@ object ZombieHorde extends Generation{
 
   // Make all zombies move
   def moveZombies = for (z:Zombie <- population) {z.updateDistancesAndTarget; z.moveToTarget}
+
 }

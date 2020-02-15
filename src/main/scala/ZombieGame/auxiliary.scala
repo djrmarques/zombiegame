@@ -16,11 +16,15 @@ trait Movement {
   def setLocation(newX: Int, newY: Int) = {x_(newX); y_(newY)}
   val stepSize: Int
 
+
+
   def getDistance(p: (Int, Int)): Double = {
     val dX: Int = x - p._1
     val dY: Int = y - p._2
     sqrt(dX * dX + dY * dY)
   }
+
+
 
   // Move in direction of the nearest target
   def moveToTarget = {
@@ -53,6 +57,8 @@ class NPC(val id: Int, startingX: Int, startingY: Int) {
   // Get current position
   def location: (Int, Int) = (x, y)
   def descriptor: (Int, Int ,Int) = (id, x, y)
+
+  def status = Map(id -> Map("location" -> location))
 }
 
 /* Population Generation Trait, Used by each ZombieHorde and HumanPopulation */
@@ -73,4 +79,6 @@ class Generation {
   def customGenerateCoordinates(coordsList: List[(Int, Int)]): List[(Int, Int, Int)] ={
     ((0 until coordsList.length) zip coordsList).toList map (v => (v._1, v._2._1, v._2._2))
   }
+
+  def popStatus = population filter (!_.isDead) map (_.status) reduce (_ ++ _)
 }

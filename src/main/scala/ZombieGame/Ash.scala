@@ -29,4 +29,6 @@ object Ash extends Movement {
   def y_(y: Int) = _y = y
 
   def location: (Int, Int)  = (x, y)
+
+  def statusMap = Map("position" -> location, "target" -> target)
 }
