@@ -83,7 +83,6 @@ class ZombieTest extends FunSuite with BeforeAndAfter {
 
     println(ZombieHorde.popStatus)
     assert(Map(0 -> Map("location" -> (1,1), "target" -> (0,0)), 1 -> Map("location" -> (2,3), "target" -> (0,0))) == ZombieHorde.popStatus)
-
   }
 
 }

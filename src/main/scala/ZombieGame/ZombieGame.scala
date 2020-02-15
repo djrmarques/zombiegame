@@ -2,6 +2,7 @@ package ZombieGame
 import java.io.File
 import java.util.Calendar
 import java.text.SimpleDateFormat
+import io.circe.syntax._
 
 object ZombieGame extends App {
 
@@ -12,7 +13,15 @@ object ZombieGame extends App {
     HumanPopulation.generatePopulation(nZombies)
   }
 
-  def main() {
+  // Returns a dictionary with the current game status
+  def currentStatus =  {
+    val ashStatus = Map("Ash" -> Ash.status)
+    val zombieStatus = Map("zombies" -> ZombieHorde.popStatus)
+    val humanStatus = Map("humans" -> HumanPopulation.popStatus)
+
+    ashStatus ++ zombieStatus ++ humanStatus
+  }
+
     /* Check if exists and create the folder to save the output */
     val outputFileFolder = new File(logOutputPath)
     if (!outputFileFolder.exists()) outputFileFolder.mkdir()
@@ -22,19 +31,22 @@ object ZombieGame extends App {
     val outputFileName = timeFormater.format(now)
     val outputFilePath = outputFileFolder + "/" + outputFileName + ".txt"
 
-
-    // Holder for the status of the game for each turn, in csv format
-    var statusPerTurn = List()
+    // Initialize Populations
+    randomInitializeInstance(3, 3)
 
     var nTurn = 0
     // Start turn 0
+
+    var statusPerTurn = List(currentStatus)
 
     // Start game loop
     while (nTurn < 10) {
       nTurn += 1
       ZombieHorde.moveZombies
+      statusPerTurn = currentStatus :: statusPerTurn
 
       // Save the Game status into the log file
     }
-  }
+
+//    println(statusPerTurn.asJson)
 }
