@@ -29,13 +29,4 @@ class HumanTest extends FunSuite {
     assert(HumanPopulation.nDead == nPopulation)
     assert(HumanPopulation.nAlive == 0)
   }
-
-  test("popStatus"){
-    val humanPopulation = List(new Human(0, 1, 1), new Human(1, 2, 3))
-    HumanPopulation.setPopulation(humanPopulation)
-
-    println(HumanPopulation.popStatus)
-    assert(Map(0 -> Map("location" -> (1,1)), 1 -> Map("location" -> (2,3))) == HumanPopulation.popStatus)
-
-  }
 }

@@ -2,15 +2,14 @@ package ZombieGame
 import java.io.File
 import java.util.Calendar
 import java.text.SimpleDateFormat
-import io.circe.syntax._
 
 object ZombieGame extends App {
 
   /* Initialize the game instance randomly */
   def randomInitializeInstance(nHumans: Int, nZombies: Int): Unit ={
     // Initialize the Human and Zombie population
-    ZombieHorde.generatePopulation(nHumans)
-    HumanPopulation.generatePopulation(nZombies)
+    ZombieHorde.generatePopulation(nZombies)
+    HumanPopulation.generatePopulation(nHumans)
   }
 
   // Returns a dictionary with the current game status
@@ -32,7 +31,7 @@ object ZombieGame extends App {
     val outputFilePath = outputFileFolder + "/" + outputFileName + ".txt"
 
     // Initialize Populations
-    randomInitializeInstance(3, 3)
+    randomInitializeInstance(1, 2)
 
     var nTurn = 0
     // Start turn 0
@@ -40,13 +39,10 @@ object ZombieGame extends App {
     var statusPerTurn = List(currentStatus)
 
     // Start game loop
-    while (nTurn < 10) {
+    while (nTurn < 3) {
       nTurn += 1
       ZombieHorde.moveZombies
       statusPerTurn = currentStatus :: statusPerTurn
-
-      // Save the Game status into the log file
     }
-
-//    println(statusPerTurn.asJson)
+  println(statusPerTurn)
 }

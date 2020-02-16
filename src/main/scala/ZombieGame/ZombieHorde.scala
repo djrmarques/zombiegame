@@ -45,7 +45,7 @@ class Zombie(id: Int, _x: Int, _y: Int) extends NPC (id: Int, _x: Int, _y: Int) 
     getNearestHuman
   }
 
-  override def status = Map(id -> Map("location" -> location, "target" -> target))
+  override def status = Map(id -> Map("posX" -> x, "posY" -> y, "targetX" -> target._1, "targetY" ->target._2))
 }
 
 // The horde of zombies. Contains methods for generating the zombies and manipulating all the zombies

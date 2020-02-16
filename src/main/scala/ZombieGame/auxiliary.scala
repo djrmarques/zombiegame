@@ -58,7 +58,7 @@ class NPC(val id: Int, startingX: Int, startingY: Int) {
   def location: (Int, Int) = (x, y)
   def descriptor: (Int, Int ,Int) = (id, x, y)
 
-  def status = Map(id -> Map("location" -> location))
+  def status = Map(id -> Map("posX" -> x, "posY" -> y))
 }
 
 /* Population Generation Trait, Used by each ZombieHorde and HumanPopulation */
