@@ -1,7 +1,8 @@
 package ZombieGame
-import java.io.File
+import java.io.{File, PrintWriter}
 import java.util.Calendar
 import java.text.SimpleDateFormat
+import io.circe.syntax._
 
 object ZombieGame extends App {
 
@@ -44,5 +45,8 @@ object ZombieGame extends App {
       ZombieHorde.moveZombies
       statusPerTurn = currentStatus :: statusPerTurn
     }
-  println(statusPerTurn)
+
+  val outputFileWriter = new PrintWriter(new File(outputFilePath))
+  outputFileWriter.write(statusPerTurn.asJson.toString())
+  outputFileWriter.close()
 }
