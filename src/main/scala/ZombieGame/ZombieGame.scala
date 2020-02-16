@@ -29,7 +29,7 @@ object ZombieGame extends App {
     val dateFormat = "yyyy-MM-dd_hh-mm-ss"
     val timeFormater = new SimpleDateFormat(dateFormat)
     val outputFileName = timeFormater.format(now)
-    val outputFilePath = outputFileFolder + "/" + outputFileName + ".txt"
+    val outputFilePath = outputFileFolder + "/" + outputFileName + ".json"
 
     // Initialize Populations
     randomInitializeInstance(1, 2)
