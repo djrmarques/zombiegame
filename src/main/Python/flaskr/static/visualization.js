@@ -166,7 +166,7 @@ function plotTurn(turn, turnData, svg) {
         .attr("id", function (d) {
             return d["id"];
         })
-        .attr("fill", humanPos)
+        .attr("fill", ashPos)
         .attr("r", radius)
 }
 
