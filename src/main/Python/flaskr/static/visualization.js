@@ -34,18 +34,14 @@ function plotGame(gameJson){
 
     var svg = d3.select("#svgViz")
 
-    plotTurn(turn, gameJson[turn], svg, x, y)
-}
-
-// Plots the position specific for a given turn
-function plotTurn(turn, turnData, svg, x, y){
-
+    turnData = gameJson[0]
     /* Zombie location */
+
     var zombies = svg.selectAll("zombies")
         .data(turnData["zombies"])
         .enter()
         .append("circle")
-        .attr("cx", function(d){console.log(d); return x(d["posX"]);})
+        .attr("cx", function(d){return x(d["posX"]);})
         .attr("cy", function(d){return y(d["posY"]);})
         .attr("id", function(d){return d["id"];})
         .attr("fill", zombiePos)
@@ -56,7 +52,7 @@ function plotTurn(turn, turnData, svg, x, y){
         .data(turnData["humans"])
         .enter()
         .append("circle")
-        .attr("cx", function(d){console.log(d); return x(d["posX"]);})
+        .attr("cx", function(d){return x(d["posX"]);})
         .attr("cy", function(d){return y(d["posY"]);})
         .attr("id", function(d){return d["id"];})
         .attr("fill", humanPos)
@@ -67,12 +63,55 @@ function plotTurn(turn, turnData, svg, x, y){
         .data(turnData["Ash"])
         .enter()
         .append("circle")
-        .attr("cx", function(d){console.log(d); return x(d["posX"]);})
+        .attr("cx", function(d){return x(d["posX"]);})
         .attr("cy", function(d){return y(d["posY"]);})
         .attr("id", "ashCircle")
         .attr("fill", ashPos)
         .attr("r", radius)
 
+    turn = 1
+    console.log(gameJson)
+    while (turn < gameJson.length){
+        plotTurn(turn, gameJson[turn], svg, x, y)
+        turn++
+    }
+}
+// Plots the position specific for a given turn
+function plotTurn(turn, turnData, svg, x, y){
+
+    console.log("Turn: ", turn)
+    /* Zombie location */
+    var zombies = svg.selectAll("zombies")
+        .data(turnData["zombies"])
+        .enter()
+        .append("circle")
+        .attr("cx", function(d){return x(d["posX"]);})
+        .attr("cy", function(d){return y(d["posY"]);})
+        .attr("id", function(d){return d["id"];})
+        .attr("fill", zombiePos)
+        .attr("r", radius)
+
+    /* Human location */
+    var humans = svg.selectAll("humans")
+        .data(turnData["humans"])
+        .enter()
+        .append("circle")
+        .attr("cx", function(d){return x(d["posX"]);})
+        .attr("cy", function(d){return y(d["posY"]);})
+        .attr("id", function(d){return d["id"];})
+        .attr("fill", humanPos)
+        .attr("r", radius)
+
+    /* Ash location */
+    var humans = svg.selectAll("ash")
+        .data(turnData["Ash"])
+        .enter()
+        .append("circle")
+        .attr("cx", function(d){ return x(d["posX"]);})
+        .attr("cy", function(d){return y(d["posY"]);})
+        .attr("id", "ashCircle")
+        .attr("fill", ashPos)
+        .attr("r", radius)
 }
 
 
