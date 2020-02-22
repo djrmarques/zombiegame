@@ -16,15 +16,13 @@ trait Movement {
   def setLocation(newX: Int, newY: Int) = {x_(newX); y_(newY)}
   val stepSize: Int
 
-
+  def updateDistanceToTarget
 
   def getDistance(p: (Int, Int)): Double = {
     val dX: Int = x - p._1
     val dY: Int = y - p._2
     sqrt(dX * dX + dY * dY)
   }
-
-
 
   // Move in direction of the nearest target
   def moveToTarget = {
@@ -41,6 +39,7 @@ trait Movement {
     else {
       throw new Exception("An error occured. This is not suposed to happen")
     }
+    updateDistanceToTarget
   }
 }
 /* NPC trait. Trait with the attributes shared between the zombies and humans*/
@@ -67,7 +66,7 @@ class Generation {
   def population: List[NPC] = _population
   def nDead: Int =  (population filter (_.isDead)).length
   def nAlive: Int =  (population filter (!_.isDead)).length
-  def anyAlive: Boolean = nAlive > 0
+  def anyAlive: Boolean = (population filter (!_.isDead)).length > 0
 
   def allCords: List[(Int, Int, Int)] = population filter (!_.isDead) map (_.descriptor)
 

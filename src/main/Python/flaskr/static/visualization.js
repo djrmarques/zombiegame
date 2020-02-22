@@ -108,6 +108,9 @@ function plotGame(gameJson) {
 
     turn = 1
     while (turn < gameJson.length) {
+        console.log("Turn: ", turn)
+        console.log(gameJson[turn])
+        console.log("")
         plotTurn(turn, gameJson[turn], svg)
         turn++
     }

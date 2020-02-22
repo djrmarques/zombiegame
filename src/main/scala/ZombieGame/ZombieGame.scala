@@ -6,6 +6,9 @@ import io.circe.syntax._
 
 object ZombieGame extends App {
 
+  Ash.setLocation(0, 0)
+  Ash.setTarget(mapWidth/2, mapHeight/2)
+
   /* Initialize the game instance randomly */
   def randomInitializeInstance(nHumans: Int, nZombies: Int): Unit ={
     // Initialize the Human and Zombie population
@@ -39,13 +42,32 @@ object ZombieGame extends App {
 
     var statusPerTurn = List(currentStatus)
 
+    var endGameFlag = false
+
+
     // Start game loop
-    while (nTurn < 10) {
+    while (nTurn < 20 && !endGameFlag) {
       nTurn += 1
       ZombieHorde.moveZombies
-      statusPerTurn = currentStatus :: statusPerTurn
-    }
 
+      // Move Ash
+      Ash.moveToTarget
+
+      // Kill all zombies and get score
+      Ash.getScore
+
+      // Zombies kill humans in range
+      ZombieHorde
+
+      statusPerTurn = currentStatus :: statusPerTurn
+
+      // End game criteria
+      if (!HumanPopulation.anyAlive){Ash.zeroScore; endGameFlag=true}
+      else if (!ZombieHorde.anyAlive){endGameFlag=true}
+
+//      println("\nTurn: ", nTurn)
+//      currentStatus foreach  (println(_))
+    }
   val outputFileWriter = new PrintWriter(new File(outputFilePath))
   outputFileWriter.write(statusPerTurn.reverse.asJson.toString())
   outputFileWriter.close()

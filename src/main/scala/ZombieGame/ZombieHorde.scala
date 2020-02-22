@@ -12,6 +12,9 @@ class Zombie(id: Int, _x: Int, _y: Int) extends NPC (id: Int, _x: Int, _y: Int) 
   def targetAsh: Boolean = _targetAsh
   def distanceToTarget: Double = _distanceToTarget
   def target: (Int, Int) = _target
+  def targetHuman: NPC = _targetHuman
+
+  def setHumanTarget(h: Human)  = {_targetHuman = h; updateDistanceToTarget}
 
   val stepSize = 400
 
@@ -33,16 +36,29 @@ class Zombie(id: Int, _x: Int, _y: Int) extends NPC (id: Int, _x: Int, _y: Int) 
 
   }
 
+  def updateDistanceToTarget = {_distanceToTarget = getDistance(_target)}
 
   // If less than 2000 units from Ash, die
   def getDistanceToAsh = {
     _distanceToAsh = getDistance(Ash.location)
   }
 
+  // Is killed?
+  def isKilled: Int = {
+    getDistanceToAsh
+    if (distanceToAsh <= Ash.attackRange){kill; 1}
+    else 0
+  }
+
   // Run the update on the distances for the human list and Ash
   def updateDistancesAndTarget: Unit = {
     getDistanceToAsh
     getNearestHuman
+  }
+
+  def killTarget = {
+    updateDistancesAndTarget
+    if (distanceToTarget < stepSize){_targetHuman.kill}
   }
 
   override def status = Map("id" -> id, "posX" -> x, "posY" -> y, "targetX" -> target._1, "targetY" ->target._2)
@@ -65,4 +81,8 @@ object ZombieHorde extends Generation{
   // Make all zombies move
   def moveZombies = for (z:Zombie <- population) {z.updateDistancesAndTarget; z.moveToTarget}
 
+  // Check which zombies are killed. Return how many zombies were killed
+  def killZombies: Int = {population map (_.isKilled) reduce (_ + _)}
+
+  def killHumans = {population foreach (_.killTarget)}
 }

@@ -76,4 +76,22 @@ class ZombieTest extends FunSuite with BeforeAndAfter {
     ZombieHorde.moveZombies
     assert(ZombieHorde.allCords != oldLocation)
   }
+
+  test("killHumanFromZombie"){
+    val zombie = new Zombie(0, 5, 5)
+    val targetHuman = new Human(0, 5, 5)
+    zombie.setHumanTarget(targetHuman)
+
+    assert(!zombie.targetHuman.isDead)
+    zombie.killTarget
+    assert(zombie.targetHuman.isDead)
+  }
+
+  test("killHumans"){
+    ZombieHorde.customGeneratePopulation(List((5, 5)))
+    HumanPopulation.setPopulation(List(new Human(0, 5, 5)))
+    assert(HumanPopulation.nAlive == 1)
+    ZombieHorde.killHumans
+    assert(HumanPopulation.nAlive == 0)
+  }
 }
