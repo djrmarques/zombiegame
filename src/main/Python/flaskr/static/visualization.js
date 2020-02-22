@@ -15,10 +15,19 @@ const y = d3.scaleLinear().domain([0, 9000]).range([height, radius*2]);
 
 // Run the create SVG function when the page fully loads
 function createSVG(){
-    d3.select("#game-viz").append("svg")
+    svg = d3.select("#game-viz").append("svg")
         .attr("width", width)
         .attr("id", "svgViz")
-        .attr("height", height);
+        .attr("height", height)
+
+    svg.append("rect")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", width)
+        .attr("height", height)
+        .attr("fill", "none")
+        .attr('stroke', 'black')
+    ;
 }
 
 // Gets the filename from the server and calls plotGame
@@ -37,7 +46,9 @@ function plotGame(gameJson){
     turnData = gameJson[0]
     /* Zombie location */
 
-    var zombies = svg.selectAll("zombies")
+
+
+    svg.selectAll("zombies")
         .data(turnData["zombies"])
         .enter()
         .append("circle")
@@ -48,7 +59,7 @@ function plotGame(gameJson){
         .attr("r", radius)
 
     /* Human location */
-    var humans = svg.selectAll("humans")
+    svg.selectAll("humans")
         .data(turnData["humans"])
         .enter()
         .append("circle")
@@ -59,7 +70,7 @@ function plotGame(gameJson){
         .attr("r", radius)
 
     /* Ash location */
-    var humans = svg.selectAll("ash")
+    svg.selectAll("ash")
         .data(turnData["Ash"])
         .enter()
         .append("circle")
@@ -83,7 +94,6 @@ function plotTurn(turn, turnData, svg, x, y){
     /* Zombie location */
     var zombies = svg.selectAll("zombies")
         .data(turnData["zombies"])
-        .enter()
         .append("circle")
         .attr("cx", function(d){return x(d["posX"]);})
         .attr("cy", function(d){return y(d["posY"]);})
@@ -94,7 +104,6 @@ function plotTurn(turn, turnData, svg, x, y){
     /* Human location */
     var humans = svg.selectAll("humans")
         .data(turnData["humans"])
-        .enter()
         .append("circle")
         .attr("cx", function(d){return x(d["posX"]);})
         .attr("cy", function(d){return y(d["posY"]);})
@@ -103,15 +112,15 @@ function plotTurn(turn, turnData, svg, x, y){
         .attr("r", radius)
 
     /* Ash location */
-    var humans = svg.selectAll("ash")
+    svg.selectAll("ash")
         .data(turnData["Ash"])
-        .enter()
         .append("circle")
         .attr("cx", function(d){ return x(d["posX"]);})
         .attr("cy", function(d){return y(d["posY"]);})
         .attr("id", "ashCircle")
         .attr("fill", ashPos)
         .attr("r", radius)
+
 }
 
 
