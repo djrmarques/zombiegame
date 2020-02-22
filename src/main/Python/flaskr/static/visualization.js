@@ -120,7 +120,7 @@ function plotTurn(turn, turnData, svg) {
     var zombies = svg.selectAll(".zombie").data(turnData["zombies"])
     zombies.exit().remove();//remove unneeded circles
     zombies.enter().append("circle").attr("r",0);//create any new circles needed
-    zombies.transition().duration(1000)
+    zombies.transition().duration(duration)
         .attr("cx", function (d) {
             return x(d["posX"]);
         })
@@ -138,7 +138,7 @@ function plotTurn(turn, turnData, svg) {
     var humans = svg.selectAll(".human").data(turnData["humans"])
     humans.exit().remove(); //remove unneeded circles
     humans.enter().append("circle").attr("r",0);//create any new circles needed
-    humans.transition().duration(1000)
+    humans.transition().duration(duration)
         .attr("cx", function (d) {
             return x(d["posX"]);
         })
@@ -156,7 +156,7 @@ function plotTurn(turn, turnData, svg) {
     var ash = svg.selectAll(".ash").data(turnData["Ash"])
     ash.exit().remove(); //remove unneeded circles
     ash.enter().append("circle").attr("r",0);//create any new circles needed
-    ash.transition().duration(1000)
+    ash.transition().duration(duration)
         .attr("cx", function (d) {
             return x(d["posX"]);
         })
