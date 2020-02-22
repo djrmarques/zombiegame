@@ -1,10 +1,6 @@
 const width = 500;
 const height = 500;
 
-// Define the scales
-const x = d3.scaleLinear().domain([0, 16000]).range([10, width]);
-const y = d3.scaleLinear().domain([0, 9000]).range([height, 10]);
-
 // Define the colors
 const radius = 10
 const ashPos = "blue"
@@ -12,6 +8,10 @@ const ashTarget = "green"
 const  zombiePos= "red"
 const zombieTarget = "ref"
 const humanPos = "yellow"
+
+// Define the scales
+const x = d3.scaleLinear().domain([0, 16000]).range([radius*2, width]);
+const y = d3.scaleLinear().domain([0, 9000]).range([height, radius*2]);
 
 // Run the create SVG function when the page fully loads
 function createSVG(){
@@ -40,11 +40,8 @@ function plotGame(gameJson){
 // Plots the position specific for a given turn
 function plotTurn(turn, turnData, svg, x, y){
 
-
-    console.log("Turn:", turn)
-    console.log("Zombie Data")
-    console.log(turnData["zombies"])
-    var ash = svg.selectAll("zombies")
+    /* Zombie location */
+    var zombies = svg.selectAll("zombies")
         .data(turnData["zombies"])
         .enter()
         .append("circle")
@@ -53,6 +50,29 @@ function plotTurn(turn, turnData, svg, x, y){
         .attr("id", function(d){return d["id"];})
         .attr("fill", zombiePos)
         .attr("r", radius)
+
+    /* Human location */
+    var humans = svg.selectAll("humans")
+        .data(turnData["humans"])
+        .enter()
+        .append("circle")
+        .attr("cx", function(d){console.log(d); return x(d["posX"]);})
+        .attr("cy", function(d){return y(d["posY"]);})
+        .attr("id", function(d){return d["id"];})
+        .attr("fill", humanPos)
+        .attr("r", radius)
+
+    /* Ash location */
+    var humans = svg.selectAll("ash")
+        .data(turnData["Ash"])
+        .enter()
+        .append("circle")
+        .attr("cx", function(d){console.log(d); return x(d["posX"]);})
+        .attr("cy", function(d){return y(d["posY"]);})
+        .attr("id", "ashCircle")
+        .attr("fill", ashPos)
+        .attr("r", radius)
+
 }
 
 
