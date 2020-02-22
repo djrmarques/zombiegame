@@ -46,6 +46,7 @@ object ZombieGame extends App {
       statusPerTurn = currentStatus :: statusPerTurn
     }
 
+  println(statusPerTurn)
   val outputFileWriter = new PrintWriter(new File(outputFilePath))
   outputFileWriter.write(statusPerTurn.asJson.toString())
   outputFileWriter.close()
