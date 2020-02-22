@@ -40,14 +40,13 @@ object ZombieGame extends App {
     var statusPerTurn = List(currentStatus)
 
     // Start game loop
-    while (nTurn < 3) {
+    while (nTurn < 10) {
       nTurn += 1
       ZombieHorde.moveZombies
       statusPerTurn = currentStatus :: statusPerTurn
     }
 
-  println(statusPerTurn)
   val outputFileWriter = new PrintWriter(new File(outputFilePath))
-  outputFileWriter.write(statusPerTurn.asJson.toString())
+  outputFileWriter.write(statusPerTurn.reverse.asJson.toString())
   outputFileWriter.close()
 }
