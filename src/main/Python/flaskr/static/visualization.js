@@ -9,6 +9,9 @@ const zombiePos = "red"
 const zombieTarget = "ref"
 const humanPos = "yellow"
 
+// Transition duration
+const duration = 1000
+
 // Define the scales
 const x = d3.scaleLinear().domain([0, 16000]).range([radius * 2, width]);
 const y = d3.scaleLinear().domain([0, 9000]).range([height, radius * 2]);
@@ -105,8 +108,6 @@ function plotGame(gameJson) {
 
     turn = 1
     while (turn < gameJson.length) {
-        console.log("Turn: ", turn)
-        console.log(x(gameJson[turn]["zombies"][0]["posX"]))
         plotTurn(turn, gameJson[turn], svg)
         turn++
     }
@@ -119,7 +120,7 @@ function plotTurn(turn, turnData, svg) {
     var zombies = svg.selectAll(".zombie").data(turnData["zombies"])
     zombies.exit().remove();//remove unneeded circles
     zombies.enter().append("circle").attr("r",0);//create any new circles needed
-    zombies.transition()
+    zombies.transition().duration(1000)
         .attr("cx", function (d) {
             return x(d["posX"]);
         })
@@ -132,26 +133,41 @@ function plotTurn(turn, turnData, svg) {
         .attr("fill", zombiePos)
         .attr("r", radius)
 
-    // /* Human location */
-    // var humans = svg.selectAll("humans")
-    //     .data(turnData["humans"])
-    //     .append("circle")
-    //     .attr("cx", function(d){return x(d["posX"]);})
-    //     .attr("cy", function(d){return y(d["posY"]);})
-    //     .attr("id", function(d){return d["id"];})
-    //     .attr("fill", humanPos)
-    //     .attr("r", radius)
-    //
-    // /* Ash location */
-    // svg.selectAll("ash")
-    //     .data(turnData["Ash"])
-    //     .append("circle")
-    //     .attr("cx", function(d){ return x(d["posX"]);})
-    //     .attr("cy", function(d){return y(d["posY"]);})
-    //     .attr("id", "ashCircle")
-    //     .attr("fill", ashPos)
-    //     .attr("r", radius)
 
+    /* Human location */
+    var humans = svg.selectAll(".human").data(turnData["humans"])
+    humans.exit().remove(); //remove unneeded circles
+    humans.enter().append("circle").attr("r",0);//create any new circles needed
+    humans.transition().duration(1000)
+        .attr("cx", function (d) {
+            return x(d["posX"]);
+        })
+        .attr("cy", function (d) {
+            return y(d["posY"]);
+        })
+        .attr("id", function (d) {
+            return d["id"];
+        })
+        .attr("fill", humanPos)
+        .attr("r", radius)
+
+
+    /* Ash location */
+    var ash = svg.selectAll(".ash").data(turnData["Ash"])
+    ash.exit().remove(); //remove unneeded circles
+    ash.enter().append("circle").attr("r",0);//create any new circles needed
+    ash.transition().duration(1000)
+        .attr("cx", function (d) {
+            return x(d["posX"]);
+        })
+        .attr("cy", function (d) {
+            return y(d["posY"]);
+        })
+        .attr("id", function (d) {
+            return d["id"];
+        })
+        .attr("fill", humanPos)
+        .attr("r", radius)
 }
 
 
