@@ -146,10 +146,6 @@ function updatePos(turn, turnData, selectName, fill) {
         .attr("cy", function (d) {
             return y(d["posY"]);
         })
-        .attr("id", function (d) {
-            return d["id"];
-        })
-        .attr("fill", fill)
         .attr("r", function (d) {
             return deadRadius(d["isDead"])
         })
