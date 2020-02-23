@@ -118,13 +118,14 @@ function plotTurn(turn, turnData, svg) {
     let zombies = svg.selectAll(".zombies").data(turnData["zombies"]);
     updatePos(turn, turnData, zombies, zombiePos);
 
-    /* Human location */
-    let humans = svg.selectAll(".human").data(turnData["humans"]);
-    updatePos(turn, turnData, humans, humanPos);
-
     /* Ash location */
     let ash = svg.selectAll(".Ash").data(turnData["Ash"]);
     updatePos(turn, turnData, ash, ashPos);
+
+    /* Human location */
+    let humans = svg.selectAll(".humans").data(turnData["humans"]);
+    updatePos(turn, turnData, humans, humanPos);
+
 }
 
 
