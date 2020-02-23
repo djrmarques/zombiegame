@@ -119,54 +119,36 @@ function plotGame(gameJson) {
     }
 }
 
+function updatePos(turn, turnData, char, fill){
+    char.transition().delay(duration*turn).duration(duration)
+        .attr("cx", function (d) {
+            return x(d["posX"]);
+        })
+        .attr("cy", function (d) {
+            return y(d["posY"]);
+        })
+        .attr("id", function (d) {
+            return d["id"];
+        })
+        .attr("fill", fill)
+        .attr("r", function (d) {return deadRadius(d["isDead"])})
+}
+
 // Plots the position specific for a given turn
 function plotTurn(turn, turnData, svg) {
 
     /* Zombie location */
-    var zombies = svg.selectAll(".zombie").data(turnData["zombies"])
-    zombies.transition().delay(duration*turn).duration(duration)
-        .attr("cx", function (d) {
-            return x(d["posX"]);
-        })
-        .attr("cy", function (d) {
-            return y(d["posY"]);
-        })
-        .attr("id", function (d) {
-            return d["id"];
-        })
-        .attr("fill", zombiePos)
-        .attr("r", function (d) {return deadRadius(d["isDead"])})
-
+    let zombies = svg.selectAll(".zombie").data(turnData["zombies"])
+    updatePos(turn, turnData, zombies, zombiePos)
 
     /* Human location */
-    var humans = svg.selectAll(".human").data(turnData["humans"])
-    humans.transition().delay(duration*turn).duration(duration)
-        .attr("cx", function (d) {
-            return x(d["posX"]);
-        })
-        .attr("cy", function (d) {
-            return y(d["posY"]);
-        })
-        .attr("id", function (d) {
-            return d["id"];
-        })
-        .attr("fill", humanPos)
-        .attr("r", function (d) {return deadRadius(d["isDead"]);})
+    let humans = svg.selectAll(".human").data(turnData["humans"])
+    updatePos(turn, turnData, humans, humanPos)
 
     /* Ash location */
-    var ash = svg.selectAll(".ash").data(turnData["Ash"])
-    ash.transition().delay(duration*turn).duration(duration)
-        .attr("cx", function (d) {
-            return x(d["posX"]);
-        })
-        .attr("cy", function (d) {
-            return y(d["posY"]);
-        })
-        .attr("id", function (d) {
-            return d["id"];
-        })
-        .attr("fill", ashPos)
-        .attr("r", function (d) {return deadRadius(d["isDead"]);})
+    let ash = svg.selectAll(".ash").data(turnData["Ash"])
+    updatePos(turn, turnData, ash, ashPos)
 }
+
 
 
