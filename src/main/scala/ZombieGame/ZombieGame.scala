@@ -35,7 +35,7 @@ object ZombieGame extends App {
     val outputFilePath = outputFileFolder + "/" + outputFileName + ".json"
 
     // Initialize Populations
-    randomInitializeInstance(1, 2)
+    randomInitializeInstance(1, 5)
 
     var nTurn = 0
     // Start turn 0
@@ -57,7 +57,7 @@ object ZombieGame extends App {
       Ash.getScore
 
       // Zombies kill humans in range
-      ZombieHorde
+      ZombieHorde.killHumans
 
       statusPerTurn = currentStatus :: statusPerTurn
 
@@ -65,8 +65,9 @@ object ZombieGame extends App {
       if (!HumanPopulation.anyAlive){Ash.zeroScore; endGameFlag=true}
       else if (!ZombieHorde.anyAlive){endGameFlag=true}
 
-//      println("\nTurn: ", nTurn)
-//      currentStatus foreach  (println(_))
+      println("\nTurn: ", nTurn)
+      println(endGameFlag)
+      currentStatus foreach  (println(_))
     }
   val outputFileWriter = new PrintWriter(new File(outputFilePath))
   outputFileWriter.write(statusPerTurn.reverse.asJson.toString())

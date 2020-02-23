@@ -10,11 +10,15 @@ const zombieTarget = "ref"
 const humanPos = "yellow"
 
 // Transition duration
-const duration = 1000
+const duration = 500
 
 // Define the scales
 const x = d3.scaleLinear().domain([0, 16000]).range([radius * 2, width]);
 const y = d3.scaleLinear().domain([0, 9000]).range([height, radius * 2]);
+
+// Variable with the turn
+var turn = 0
+
 
 // Run the create SVG function when the page fully loads
 function createSVG() {
@@ -43,8 +47,6 @@ function getFile(fileName) {
 
 // Plots the game using d3.js
 function plotGame(gameJson) {
-
-    var turn = 0 // This will change over the time
 
     /* Remove th svg after a game file is selected */
     d3.select("#svgViz").remove()
@@ -123,7 +125,7 @@ function plotTurn(turn, turnData, svg) {
     var zombies = svg.selectAll(".zombie").data(turnData["zombies"])
     zombies.exit().remove();//remove unneeded circles
     zombies.enter().append("circle").attr("r",0);//create any new circles needed
-    zombies.transition().duration(duration)
+    zombies.transition().delay(duration*turn).duration(duration)
         .attr("cx", function (d) {
             return x(d["posX"]);
         })
@@ -140,26 +142,12 @@ function plotTurn(turn, turnData, svg) {
     /* Human location */
     var humans = svg.selectAll(".human").data(turnData["humans"])
     humans.exit().remove(); //remove unneeded circles
-    humans.enter().append("circle").attr("r",0);//create any new circles needed
-    humans.transition().duration(duration)
-        .attr("cx", function (d) {
-            return x(d["posX"]);
-        })
-        .attr("cy", function (d) {
-            return y(d["posY"]);
-        })
-        .attr("id", function (d) {
-            return d["id"];
-        })
-        .attr("fill", humanPos)
-        .attr("r", radius)
-
 
     /* Ash location */
     var ash = svg.selectAll(".ash").data(turnData["Ash"])
     ash.exit().remove(); //remove unneeded circles
     ash.enter().append("circle").attr("r",0);//create any new circles needed
-    ash.transition().duration(duration)
+    ash.transition().delay(duration*turn).duration(duration)
         .attr("cx", function (d) {
             return x(d["posX"]);
         })
