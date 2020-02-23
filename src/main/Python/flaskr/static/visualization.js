@@ -2,15 +2,18 @@ const width = 500;
 const height = 500;
 
 // Define the colors
-const radius = 10
-const ashPos = "blue"
-const ashTarget = "green"
-const zombiePos = "red"
-const zombieTarget = "ref"
-const humanPos = "yellow"
+const radius = 10;
+const ashPos = "blue";
+const ashTarget = "green";
+const zombiePos = "red";
+const zombieTarget = "red";
+const humanPos = "yellow";
+
+const ashRange = 2000;
+const zombieRange = 400;
 
 // Transition duration
-const duration = 500
+const duration = 500;
 
 // Define the scales
 const x = d3.scaleLinear().domain([0, 16000]).range([radius * 2, width]);
@@ -44,82 +47,57 @@ function getFile(fileName) {
     $.post("/get_game_file", {fileName: fileName}).done(function (json) {
         plotGame(json)
     })
-};
+}
+
+// Creates the d3 svg objects and the svg element
+function createPos(turnData, selectName, fill){
+
+    svg.selectAll(selectName)
+        .data(turnData[selectName])
+        .enter()
+        .append("circle")
+        .attr("cx", function (d) {
+            return x(d["posX"]);
+        })
+        .attr("cy", function (d) {
+            return y(d["posY"]);
+        })
+        .attr("id", function (d) {
+            return d["id"];
+        })
+        .attr("fill", fill)
+        .attr("class", selectName)
+        .attr("r", radius)
+}
 
 
 // Plots the game using d3.js
 function plotGame(gameJson) {
 
     /* Remove th svg after a game file is selected */
-    d3.select("#svgViz").remove()
-    createSVG()
+    d3.select("#svgViz").remove();
+    createSVG();
 
-    var svg = d3.select("#svgViz")
+    let svg = d3.select("#svgViz");
 
-    turnData = gameJson[0]
+    let turnData = gameJson[0];
     /* Zombie location */
 
-    svg.selectAll("zombies")
-        .data(turnData["zombies"])
-        .enter()
-        .append("circle")
-        .attr("cx", function (d) {
-            return x(d["posX"]);
-        })
-        .attr("cy", function (d) {
-            return y(d["posY"]);
-        })
-        .attr("id", function (d) {
-            return d["id"];
-        })
-        .attr("fill", zombiePos)
-        .attr("class", "zombie")
-        .attr("r", radius)
+    createPos(turnData, "zombies", zombiePos)
+    createPos(turnData, "humans", humanPos)
+    createPos(turnData, "Ash", ashPos)
 
-    /* Human location */
-    svg.selectAll("humans")
-        .data(turnData["humans"])
-        .enter()
-        .append("circle")
-        .attr("cx", function (d) {
-            return x(d["posX"]);
-        })
-        .attr("cy", function (d) {
-            return y(d["posY"]);
-        })
-        .attr("id", function (d) {
-            return d["id"];
-        })
-        .attr("class", "human")
-        .attr("fill", humanPos)
-        .attr("r", radius)
-
-    /* Ash location */
-    svg.selectAll("ash")
-        .data(turnData["Ash"])
-        .enter()
-        .append("circle")
-        .attr("cx", function (d) {
-            return x(d["posX"]);
-        })
-        .attr("cy", function (d) {
-            return y(d["posY"]);
-        })
-        .attr("id", "ashCircle")
-        .attr("class", "ash")
-        .attr("fill", ashPos)
-        .attr("r", radius)
-
-    turn = 1
+    turn = 1;
     while (turn < gameJson.length) {
-        console.log("\nTurn: ", turn)
-        console.log(gameJson[turn])
-        plotTurn(turn, gameJson[turn], svg)
+        console.log("\nTurn: ", turn);
+        console.log(gameJson[turn]);
+        plotTurn(turn, gameJson[turn], svg);
         turn++
     }
 }
 
-function updatePos(turn, turnData, char, fill){
+
+function updatePos(turn, turnData, char, fill, attackRange){
     char.transition().delay(duration*turn).duration(duration)
         .attr("cx", function (d) {
             return x(d["posX"]);
@@ -138,16 +116,16 @@ function updatePos(turn, turnData, char, fill){
 function plotTurn(turn, turnData, svg) {
 
     /* Zombie location */
-    let zombies = svg.selectAll(".zombie").data(turnData["zombies"])
-    updatePos(turn, turnData, zombies, zombiePos)
+    let zombies = svg.selectAll(".zombies").data(turnData["zombies"])
+    updatePos(turn, turnData, zombies, zombiePos, zombieRange)
 
     /* Human location */
     let humans = svg.selectAll(".human").data(turnData["humans"])
-    updatePos(turn, turnData, humans, humanPos)
+    updatePos(turn, turnData, humans, humanPos, 0)
 
     /* Ash location */
-    let ash = svg.selectAll(".ash").data(turnData["Ash"])
-    updatePos(turn, turnData, ash, ashPos)
+    let ash = svg.selectAll(".Ash").data(turnData["Ash"])
+    updatePos(turn, turnData, ash, ashPos, ashRange)
 }
 
 
