@@ -21,6 +21,7 @@ class Zombie(id: Int, _x: Int, _y: Int) extends NPC (id: Int, _x: Int, _y: Int) 
   // Changes the target based on the nearest human position
   def getNearestHuman = {
     val d = (HumanPopulation.population filter (!_.isDead) map (h => getDistance((h.location)))) zip HumanPopulation.population
+    if (d.isEmpty){throw new Exception("No alive targets")}
     val minDistance = (d minBy (_._1))
 
     if (_distanceToAsh < minDistance._1) {
@@ -57,7 +58,7 @@ class Zombie(id: Int, _x: Int, _y: Int) extends NPC (id: Int, _x: Int, _y: Int) 
   }
 
   def killTarget = {
-    updateDistancesAndTarget
+    updateDistanceToTarget
     if (distanceToTarget < stepSize){_targetHuman.kill}
   }
 

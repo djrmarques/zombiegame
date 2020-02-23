@@ -1,6 +1,9 @@
 const width = 500;
 const height = 500;
 
+// Store game Json
+var globalGameJson;
+
 // Define the colors
 const radius = 10;
 const ashPos = "blue";
@@ -49,8 +52,11 @@ function getFile(fileName) {
 }
 
 // Creates the d3 svg objects and the svg element
-function createPos(turnData, selectName, fill, svg, attackRange){
+function createPos(turnData, selectName, fill, attackRange){
 
+    let svg = d3.select("#svgViz");
+
+    /* Draw the position */
     svg.selectAll(selectName)
         .data(turnData[selectName])
         .enter()
@@ -67,12 +73,19 @@ function createPos(turnData, selectName, fill, svg, attackRange){
         .attr("fill", fill)
         .attr("class", selectName)
         .attr("r", radius)
-
 }
 
 
 // Plots the game using d3.js
 function plotGame(gameJson) {
+
+    $("#turn").text(0)
+    globalGameJson = gameJson;
+
+    const nTurns = gameJson.length;
+
+    // Change the slider maximum value
+    $("#turnSlider").attr("max", nTurns);
 
     /* Remove th svg after a game file is selected */
     d3.select("#svgViz").remove();
@@ -83,21 +96,13 @@ function plotGame(gameJson) {
     let turnData = gameJson[0];
     /* Zombie location */
 
-    createPos(turnData, "zombies", zombiePos, svg, zombieRange);
-    createPos(turnData, "humans", humanPos, svg, 0);
-    createPos(turnData, "Ash", ashPos, svg, ashRange);
-
-    turn = 1;
-    while (turn < gameJson.length) {
-        console.log("\nTurn: ", turn);
-        console.log(gameJson[turn]);
-        plotTurn(turn, gameJson[turn], svg);
-        turn++
-    }
+    createPos(turnData, "zombies", zombiePos, zombieRange);
+    createPos(turnData, "humans", humanPos, 0);
+    createPos(turnData, "Ash", ashPos, ashRange);
 }
 
 function updatePos(turn, turnData, char, fill){
-    char.transition().delay(duration*turn).duration(duration)
+    char.transition().duration(duration)
         .attr("cx", function (d) {
             return x(d["posX"]);
         })
@@ -112,7 +117,11 @@ function updatePos(turn, turnData, char, fill){
 }
 
 // Plots the position specific for a given turn
-function plotTurn(turn, turnData, svg) {
+function plotTurn(turn, turnData) {
+
+    $("#turn").text(turn)
+
+    let svg = d3.select("#svgViz");
 
     /* Zombie location */
     let zombies = svg.selectAll(".zombies").data(turnData["zombies"]);

@@ -16,7 +16,7 @@
 <body onload="createSVG()">
 <h1> Game Vizualization</h1>
 <div class="row justify-content-center">
-    <div class="col-8" id="game-viz"></div>
+    <div class="col-8" id="game-viz"> </div>
     <div class="col-4">
         <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -26,6 +26,10 @@
                 {% for file in files %}
                 <button class="dropdown-item" type="button" value={{file}} onclick=getFile(this.value)>{{file}}</button>
                 {% endfor %}
+            </div>
+            <div id="control" >
+                <input type="range" min="0" max="100" value="0" class="slider" id="turnSlider", onchange="plotTurn(this.value, globalGameJson[this.value])">
+                <p id="turn"> </p>
             </div>
         </div>
     </div>
