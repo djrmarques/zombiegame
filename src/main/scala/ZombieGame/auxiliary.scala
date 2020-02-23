@@ -48,6 +48,7 @@ class NPC(val id: Int, startingX: Int, startingY: Int) {
   private var _y: Int = startingY
   private var _isDead = false
   def isDead: Boolean =  _isDead
+  def isDeadInt: Int = if(isDead) 1 else 0
   def x: Int = _x
   def y: Int = _y
   def kill = _isDead = true
@@ -57,7 +58,7 @@ class NPC(val id: Int, startingX: Int, startingY: Int) {
   def location: (Int, Int) = (x, y)
   def descriptor: (Int, Int ,Int) = (id, x, y)
 
-  def status = Map("id" -> id, "posX" -> x, "posY" -> y)
+  def status = Map("id" -> id, "posX" -> x, "posY" -> y, "isDead" -> isDeadInt)
 }
 
 /* Population Generation Trait, Used by each ZombieHorde and HumanPopulation */
@@ -79,5 +80,5 @@ class Generation {
     ((0 until coordsList.length) zip coordsList).toList map (v => (v._1, v._2._1, v._2._2))
   }
 
-  def popStatus = population filter (!_.isDead) map (_.status)
+  def popStatus = population map (_.status)
 }

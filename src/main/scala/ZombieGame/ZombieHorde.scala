@@ -61,7 +61,7 @@ class Zombie(id: Int, _x: Int, _y: Int) extends NPC (id: Int, _x: Int, _y: Int) 
     if (distanceToTarget < stepSize){_targetHuman.kill}
   }
 
-  override def status = Map("id" -> id, "posX" -> x, "posY" -> y, "targetX" -> target._1, "targetY" ->target._2)
+  override def status = Map("id" -> id, "posX" -> x, "posY" -> y, "targetX" -> target._1, "targetY" ->target._2, "isDead" -> isDeadInt)
 }
 
 // The horde of zombies. Contains methods for generating the zombies and manipulating all the zombies

@@ -19,6 +19,8 @@ const y = d3.scaleLinear().domain([0, 9000]).range([height, radius * 2]);
 // Variable with the turn
 var turn = 0
 
+// function that outputs 0 if the target is dead, else the radious
+function deadRadius(isDead){if (isDead==1) return 0; else return radius}
 
 // Run the create SVG function when the page fully loads
 function createSVG() {
@@ -110,9 +112,8 @@ function plotGame(gameJson) {
 
     turn = 1
     while (turn < gameJson.length) {
-        console.log("Turn: ", turn)
+        console.log("\nTurn: ", turn)
         console.log(gameJson[turn])
-        console.log("")
         plotTurn(turn, gameJson[turn], svg)
         turn++
     }
@@ -123,8 +124,6 @@ function plotTurn(turn, turnData, svg) {
 
     /* Zombie location */
     var zombies = svg.selectAll(".zombie").data(turnData["zombies"])
-    zombies.exit().remove();//remove unneeded circles
-    zombies.enter().append("circle").attr("r",0);//create any new circles needed
     zombies.transition().delay(duration*turn).duration(duration)
         .attr("cx", function (d) {
             return x(d["posX"]);
@@ -136,17 +135,26 @@ function plotTurn(turn, turnData, svg) {
             return d["id"];
         })
         .attr("fill", zombiePos)
-        .attr("r", radius)
+        .attr("r", function (d) {return deadRadius(d["isDead"])})
 
 
     /* Human location */
     var humans = svg.selectAll(".human").data(turnData["humans"])
-    humans.exit().remove(); //remove unneeded circles
+    humans.transition().delay(duration*turn).duration(duration)
+        .attr("cx", function (d) {
+            return x(d["posX"]);
+        })
+        .attr("cy", function (d) {
+            return y(d["posY"]);
+        })
+        .attr("id", function (d) {
+            return d["id"];
+        })
+        .attr("fill", humanPos)
+        .attr("r", function (d) {return deadRadius(d["isDead"]);})
 
     /* Ash location */
     var ash = svg.selectAll(".ash").data(turnData["Ash"])
-    ash.exit().remove(); //remove unneeded circles
-    ash.enter().append("circle").attr("r",0);//create any new circles needed
     ash.transition().delay(duration*turn).duration(duration)
         .attr("cx", function (d) {
             return x(d["posX"]);
@@ -158,7 +166,7 @@ function plotTurn(turn, turnData, svg) {
             return d["id"];
         })
         .attr("fill", ashPos)
-        .attr("r", radius)
+        .attr("r", function (d) {return deadRadius(d["isDead"]);})
 }
 
 
