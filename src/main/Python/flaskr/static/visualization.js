@@ -6,6 +6,7 @@ var globalGameJson;
 
 // Define the colors
 const radius = 10;
+const lineStroke = 2;
 const ashPos = "blue";
 const ashTarget = "green";
 const zombiePos = "red";
@@ -25,8 +26,16 @@ const y = d3.scaleLinear().domain([0, 9000]).range([height, radius * 2]);
 // Variable with the turn
 var turn = 0;
 
-// function that outputs 0 if the target is dead, else the radious
-function deadRadius(isDead){if (isDead===1) return 0; else return radius}
+// function that outputs 0 if the target is dead, else the radius
+function deadRadius(isDead) {
+    if (isDead === 1) return 0; else return radius
+}
+
+// function that outputs 0 if the the character is dead
+function deadStroke(isDead) {
+    if (isDead === 1) return 0; else return lineStroke
+}
+
 
 // Run the create SVG function when the page fully loads
 function createSVG() {
@@ -41,7 +50,7 @@ function createSVG() {
         .attr("width", width)
         .attr("height", height)
         .attr("fill", "none")
-        .attr('stroke', 'black') ;
+        .attr('stroke', 'black');
 }
 
 // Gets the filename from the server and calls plotGame
@@ -52,11 +61,11 @@ function getFile(fileName) {
 }
 
 // Creates the d3 svg objects and the svg element
-function createPos(turnData, selectName, fill, attackRange){
+function createPos(turnData, selectName, fill, attackRange) {
 
     let svg = d3.select("#svgViz");
 
-    /* Draw the position */
+    // /* Draw the position */
     svg.selectAll(selectName)
         .data(turnData[selectName])
         .enter()
@@ -73,6 +82,30 @@ function createPos(turnData, selectName, fill, attackRange){
         .attr("fill", fill)
         .attr("class", selectName)
         .attr("r", radius)
+
+    if (selectName == "zombies" || selectName == "Ash") {
+        svg.selectAll(selectName + "Line")
+            .data(turnData[selectName])
+            .enter()
+            .append("line")
+            .attr("x1", function (d) {
+                return x(d["posX"]);
+            })
+            .attr("x2", function (d) {
+                return x(d["targetX"]);
+            })
+            .attr("y1", function (d) {
+                return y(d["posY"]);
+            })
+            .attr("y2", function (d) {
+                return y(d["targetY"]);
+            })
+            .attr("fill", "none")
+            .attr("stroke", fill)
+            .attr("opacity", "0.5")
+            .attr("stroke-width", lineStroke)
+            .attr("class", selectName + "Line")
+    }
 }
 
 
@@ -101,7 +134,11 @@ function plotGame(gameJson) {
     createPos(turnData, "Ash", ashPos, ashRange);
 }
 
-function updatePos(turn, turnData, char, fill){
+function updatePos(turn, turnData, selectName, fill) {
+
+    let svg = d3.select("#svgViz");
+
+    let char = svg.selectAll("." + selectName).data(turnData[selectName]);
     char.transition().duration(duration)
         .attr("cx", function (d) {
             return x(d["posX"]);
@@ -113,29 +150,54 @@ function updatePos(turn, turnData, char, fill){
             return d["id"];
         })
         .attr("fill", fill)
-        .attr("r", function (d) {return deadRadius(d["isDead"])})
+        .attr("r", function (d) {
+            return deadRadius(d["isDead"])
+        })
+
+
+    if (selectName == "zombies" || selectName == "Ash") {
+        svg.selectAll(selectName + "Line")
+            .data(turnData[selectName])
+            .transition().duration(duration)
+            .attr("x1", function (d) {
+                return x(d["posX"]);
+            })
+            .attr("x2", function (d) {
+                return x(d["targetX"]);
+            })
+            .attr("y1", function (d) {
+                return y(d["posY"]);
+            })
+            .attr("y2", function (d) {
+                return y(d["targetY"]);
+            })
+            .attr("stroke-width", 1.5)
+    }
 }
 
 // Plots the position specific for a given turn
-function plotTurn(turn, turnData) {
+    function plotTurn(turn) {
 
-    $("#turn").text(turn)
+        let turnData = globalGameJson[turn]
+        console.log("Turn: ", turn)
+        console.log(turnData)
 
-    let svg = d3.select("#svgViz");
+        $("#turn").text(turn)
 
-    /* Zombie location */
-    let zombies = svg.selectAll(".zombies").data(turnData["zombies"]);
-    updatePos(turn, turnData, zombies, zombiePos);
 
-    /* Ash location */
-    let ash = svg.selectAll(".Ash").data(turnData["Ash"]);
-    updatePos(turn, turnData, ash, ashPos);
+        /* Zombie location */
+        // let zombies = svg.selectAll(".zombies").data(turnData["zombies"]);
+        updatePos(turn, turnData, "zombies", zombiePos);
 
-    /* Human location */
-    let humans = svg.selectAll(".humans").data(turnData["humans"]);
-    updatePos(turn, turnData, humans, humanPos);
+        /* Ash location */
+        // let ash = svg.selectAll(".Ash").data(turnData["Ash"]);
+        updatePos(turn, turnData, "Ash", ashPos);
 
-}
+        /* Human location */
+        // let humans = svg.selectAll(".humans").data(turnData["humans"]);
+        updatePos(turn, turnData, "humans", humanPos);
+
+    }
 
 
 

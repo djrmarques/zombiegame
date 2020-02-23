@@ -77,6 +77,7 @@ object ZombieHorde extends Generation{
 
   def customGeneratePopulation(coords: List[(Int, Int)])= {
     setPopulation(customGenerateCoordinates(coords) map ((p: (Int, Int, Int)) => new Zombie(p._1, p._2, p._3)))
+    population foreach (_.updateDistancesAndTarget)
   }
 
   // Make all zombies move
