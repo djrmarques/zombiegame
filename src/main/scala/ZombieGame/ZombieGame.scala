@@ -19,8 +19,8 @@ object ZombieGame extends App {
   // Returns a dictionary with the current game status
   def currentStatus =  {
     val ashStatus = Map("Ash" -> Ash.status)
-    val zombieStatus = Map("zombies" -> ZombieHorde.popStatus)
     val humanStatus = Map("humans" -> HumanPopulation.popStatus)
+    val zombieStatus = Map("zombies" -> ZombieHorde.popStatus)
 
     ashStatus ++ zombieStatus ++ humanStatus
   }

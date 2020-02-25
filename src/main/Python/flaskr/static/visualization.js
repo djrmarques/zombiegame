@@ -118,13 +118,11 @@ function plotGame(gameJson) {
     const nTurns = gameJson.length;
 
     // Change the slider maximum value
-    $("#turnSlider").attr("max", nTurns);
+    $("#turnSlider").attr("max", nTurns-1);
 
     /* Remove th svg after a game file is selected */
     d3.select("#svgViz").remove();
     createSVG();
-
-    let svg = d3.select("#svgViz");
 
     let turnData = gameJson[0];
     /* Zombie location */
@@ -135,6 +133,9 @@ function plotGame(gameJson) {
 }
 
 function updatePos(turn, turnData, selectName, fill) {
+
+    // Print the position of everyone on the window
+
 
     let svg = d3.select("#svgViz");
 
@@ -152,9 +153,10 @@ function updatePos(turn, turnData, selectName, fill) {
 
 
     if (selectName == "zombies" || selectName == "Ash") {
-        svg.selectAll(selectName + "Line")
+        svg.selectAll("." + selectName + "Line")
             .data(turnData[selectName])
-            .transition().duration(duration)
+            .transition()
+            .duration(duration)
             .attr("x1", function (d) {
                 return x(d["posX"]);
             })
@@ -167,7 +169,9 @@ function updatePos(turn, turnData, selectName, fill) {
             .attr("y2", function (d) {
                 return y(d["targetY"]);
             })
-            .attr("stroke-width", 1.5)
+            .attr("stroke-width", function (d) {
+                return deadStroke(d["isDead"])
+            })
     }
 }
 
@@ -175,25 +179,29 @@ function updatePos(turn, turnData, selectName, fill) {
     function plotTurn(turn) {
 
         let turnData = globalGameJson[turn]
-        console.log("Turn: ", turn)
-        console.log(turnData)
+        printStatus(turnData)
 
+        // Display which turn it is
         $("#turn").text(turn)
 
 
         /* Zombie location */
-        // let zombies = svg.selectAll(".zombies").data(turnData["zombies"]);
         updatePos(turn, turnData, "zombies", zombiePos);
 
         /* Ash location */
-        // let ash = svg.selectAll(".Ash").data(turnData["Ash"]);
         updatePos(turn, turnData, "Ash", ashPos);
 
         /* Human location */
-        // let humans = svg.selectAll(".humans").data(turnData["humans"]);
         updatePos(turn, turnData, "humans", humanPos);
 
     }
+
+// Print the status of every element on the screen
+function printStatus(turnData){
+    console.log("Turn: ", turn)
+    console.log(turnData)
+    console.log(turnData)
+}
 
 
 
