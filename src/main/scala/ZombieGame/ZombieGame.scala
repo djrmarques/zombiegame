@@ -44,7 +44,6 @@ object ZombieGame extends App {
 
     var endGameFlag = false
 
-
     // Start game loop
     while (nTurn < 50 && !endGameFlag) {
       nTurn += 1

@@ -85,5 +85,5 @@ object ZombieHorde extends Generation{
   // Check which zombies are killed. Return how many zombies were killed
   def killZombies: Int = {population map (_.isKilled) reduce (_ + _)}
 
-  def killHumans = population foreach (_.killTarget)
+  def killHumans = population filter (!_.isDead) foreach (_.killTarget)
 }
