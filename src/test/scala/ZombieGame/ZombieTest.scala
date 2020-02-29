@@ -106,7 +106,7 @@ class ZombieTest extends FunSuite with BeforeAndAfter {
     assert(newCoords._2 == z.stepSize)
   }
 
-  test("testMoveStep"){
+  test("testMoveStep1"){
     val z = new Zombie(0, 0, 0)
     val h1 = new Human(0, 0, z.stepSize*2)
     z.setHumanTarget(h1)
@@ -114,5 +114,15 @@ class ZombieTest extends FunSuite with BeforeAndAfter {
     z.moveToTarget
     assert(z.target == (0, z.stepSize*2))
     assert(z.y == z.stepSize)
+  }
+
+  test("testMoveStep2"){
+    val z = new Zombie(0, 0, 0)
+    val h1 = new Human(0, 0, -z.stepSize*2)
+    z.setHumanTarget(h1)
+    assert(z.target == (0, -z.stepSize*2))
+    z.moveToTarget
+    assert(z.target == (0, -z.stepSize*2))
+    assert(z.y == -z.stepSize)
   }
 }
