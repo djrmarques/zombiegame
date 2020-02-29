@@ -57,9 +57,6 @@ trait Movement {
 
     // Assert that the movement distance is not longer than the step size
     assert(round(getDistance((oldX, oldY))) <= stepSize+1, s"Distance Traveled: ${getDistance((oldX, oldY))}  | stepSize: $stepSize")
-
-    // Update the distance to target with the new location
-    updateDistanceToTarget
   }
 }
 /* NPC trait. Trait with the attributes shared between the zombies and humans*/

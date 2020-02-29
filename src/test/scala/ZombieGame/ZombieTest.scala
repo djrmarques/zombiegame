@@ -46,6 +46,21 @@ class ZombieTest extends FunSuite with BeforeAndAfter {
     assert(zombie.target == (4, 5))
   }
 
+  test("testGetNearestHuman5") {
+    val zombie = new Zombie(4, 4364, 5697)
+    val humans = List(
+      new Human(8, 4249, 4695),
+      new Human(2, 8344, 2717),
+      new Human(6, 6253, 1575),
+    )
+    Ash.setLocation(8000, 4500)
+
+    HumanPopulation.setPopulation(humans)
+    zombie.updateDistancesAndTarget
+    zombie.moveToTarget
+    assert(zombie.target == (4249, 4695))
+  }
+
   test("testMoveToTarget1"){
     val zombie = new Zombie(0, 4, 4)
     zombie.updateDistancesAndTarget
@@ -97,7 +112,6 @@ class ZombieTest extends FunSuite with BeforeAndAfter {
   }
 
   /* Test the distance method on the Zombies*/
-
   test("testMoveStepDistance"){
     val z = new Zombie(0, 0, 0)
     val h1 = new Human(0, 0, z.stepSize*2)

@@ -71,6 +71,7 @@ object ZombieHorde extends Generation{
 
   def generatePopulation(n: Int)= {
     setPopulation(randomGenerateCoordinates(n) map ((p: (Int, Int, Int)) => new Zombie(p._1, p._2, p._3)))
+    population foreach (_.updateDistancesAndTarget)
   }
 
   def customGeneratePopulation(coords: List[(Int, Int)])= {
@@ -79,7 +80,7 @@ object ZombieHorde extends Generation{
   }
 
   // Make all zombies move
-  def moveZombies = for (z:Zombie <- population) {z.updateDistancesAndTarget; z.moveToTarget}
+  def moveZombies = for (z:Zombie <- population) {z.updateDistancesAndTarget; z.moveToTarget; z.updateDistancesAndTarget;}
 
   // Check which zombies are killed. Return how many zombies were killed
   def killZombies: Int = {population map (_.isKilled) reduce (_ + _)}

@@ -2,7 +2,7 @@ const width = 700;
 const height = 500;
 
 // Store game Json
-var globalGameJson;
+let globalGameJson;
 
 // Define the colors
 const radius = 10;
@@ -119,5 +119,12 @@ function printStatus(turnData){
         let zombieString = Object.keys(zombieStats).map(d => {return d + ": " + zombieStats[d] + " | "}).reduce(reducer, "");
         $("#status-log").append("<p> Zombie" + i + ": " + zombieString + "<p>");
     }
+
+    for (i=0; i<turnData["humans"].length; i++){
+        let humanStats = turnData["humans"][i];
+        let humanString = Object.keys(humanStats).map(d => {return d + ": " + humanStats[d] + " | "}).reduce(reducer, "");
+        $("#status-log").append("<p> Human" + i + ": " + humanString + "<p>");
+    }
+
 }
 

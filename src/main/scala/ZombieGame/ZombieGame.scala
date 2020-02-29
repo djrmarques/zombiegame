@@ -12,8 +12,8 @@ object ZombieGame extends App {
   /* Initialize the game instance randomly */
   def randomInitializeInstance(nHumans: Int, nZombies: Int): Unit ={
     // Initialize the Human and Zombie population
-    ZombieHorde.generatePopulation(nZombies)
     HumanPopulation.generatePopulation(nHumans)
+    ZombieHorde.generatePopulation(nZombies)
   }
 
   // Returns a dictionary with the current game status
