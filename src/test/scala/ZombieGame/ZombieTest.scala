@@ -88,8 +88,9 @@ class ZombieTest extends FunSuite with BeforeAndAfter {
   }
 
   test("killHumans"){
-    ZombieHorde.setPopulation(List(new Zombie(0, 5, 5)))
+    ZombieHorde.setPopulation(List(new Zombie(0, 10, 100)))
     HumanPopulation.setPopulation(List(new Human(0, 5, 5)))
+    ZombieHorde.moveZombies
     assert(HumanPopulation.nAlive == 1)
     ZombieHorde.killHumans
     assert(HumanPopulation.nAlive == 0)

@@ -57,7 +57,7 @@ class Zombie(id: Int, _x: Int, _y: Int) extends NPC (id: Int, _x: Int, _y: Int) 
 
   def killTarget = {
     updateDistanceToTarget
-    if (distanceToTarget < stepSize){_targetHuman.kill}
+    if (distanceToTarget < stepSize){_targetHuman.kill; x_(_targetHuman.x); y_(_targetHuman.y)}
   }
 
   override def status = Map("id" -> id, "posX" -> x, "posY" -> y, "targetX" -> target._1, "targetY" ->target._2, "isDead" -> isDeadInt)
@@ -84,5 +84,5 @@ object ZombieHorde extends Generation{
   // Check which zombies are killed. Return how many zombies were killed
   def killZombies: Int = {population map (_.isKilled) reduce (_ + _)}
 
-  def killHumans = {population foreach (_.killTarget)}
+  def killHumans = population foreach (_.killTarget)
 }
