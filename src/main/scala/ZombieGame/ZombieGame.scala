@@ -35,7 +35,7 @@ object ZombieGame extends App {
     val outputFilePath = outputFileFolder + "/" + outputFileName + ".json"
 
     // Initialize Populations
-    randomInitializeInstance(10, 10)
+    randomInitializeInstance(5, 5)
 
     var nTurn = 0
     // Start turn 0

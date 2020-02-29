@@ -116,14 +116,23 @@ function printStatus(turnData){
     let i;
     for (i=0; i<turnData["zombies"].length; i++){
         let zombieStats = turnData["zombies"][i];
-        let zombieString = Object.keys(zombieStats).map(d => {return d + ": " + zombieStats[d] + " | "}).reduce(reducer, "");
+        if (zombieStats["isDead"] == 0) {
+            let zombieString = Object.keys(zombieStats).map(d => {
+                return d + ": " + zombieStats[d] + " | "
+            }).reduce(reducer, "");
         $("#status-log").append("<p> Zombie" + i + ": " + zombieString + "<p>");
+        }
     }
 
+    console.log()
     for (i=0; i<turnData["humans"].length; i++){
         let humanStats = turnData["humans"][i];
-        let humanString = Object.keys(humanStats).map(d => {return d + ": " + humanStats[d] + " | "}).reduce(reducer, "");
+        if (humanStats["isDead"] == 0) {
+            let humanString = Object.keys(humanStats).filter(d => !humanStats[d]["isDead"]).map(d => {
+                return d + ": " + humanStats[d] + " | "
+            }).reduce(reducer, "");
         $("#status-log").append("<p> Human" + i + ": " + humanString + "<p>");
+        }
     }
 
 }
