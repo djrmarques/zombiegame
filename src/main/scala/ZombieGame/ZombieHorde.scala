@@ -83,7 +83,7 @@ object ZombieHorde extends Generation{
   def moveZombies = for (z:Zombie <- population) {z.updateDistancesAndTarget; z.moveToTarget; z.updateDistanceToTarget;}
 
   // Check which zombies are killed. Return how many zombies were killed
-  def killZombies: Int = {population map (_.isKilled) reduce (_ + _)}
+  def killZombies: Int = {population filter (!_.isDead) map (_.isKilled) reduce (_ + _)}
 
   def killHumans = population filter (!_.isDead) foreach (_.killTarget)
 }
