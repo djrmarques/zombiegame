@@ -64,10 +64,6 @@ object ZombieGame extends App {
       // End game criteria
       if (!HumanPopulation.anyAlive){Ash.zeroScore; endGameFlag=true}
       else if (!ZombieHorde.anyAlive){endGameFlag=true}
-
-//      println("\nTurn: ", nTurn)
-//      println(endGameFlag)
-//      currentStatus foreach  (println(_))
     }
   val outputFileWriter = new PrintWriter(new File(outputFilePath))
   outputFileWriter.write(statusPerTurn.reverse.asJson.toString())

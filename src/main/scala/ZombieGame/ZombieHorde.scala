@@ -13,8 +13,9 @@ class Zombie(id: Int, _x: Int, _y: Int) extends NPC (id: Int, _x: Int, _y: Int) 
   def distanceToTarget: Double = _distanceToTarget
   def target: (Int, Int) = _target
   def targetHuman: NPC = _targetHuman
+  def target_(t: (Int, Int)) = {_target = (t._1, t._2)}
 
-  def setHumanTarget(h: Human)  = {_targetHuman = h; updateDistanceToTarget}
+  def setHumanTarget(h: Human)  = {_targetHuman = h; target_((h.x, h.y)) ;updateDistanceToTarget}
 
   val stepSize = 400
 
@@ -29,12 +30,9 @@ class Zombie(id: Int, _x: Int, _y: Int) extends NPC (id: Int, _x: Int, _y: Int) 
       _distanceToTarget = _distanceToAsh
       _targetAsh = true
     } else {
-      _target = minDistance._2.location // Assign the nearest human to the target
-      _distanceToTarget = minDistance._1 // Save the distance to target
+      setHumanTarget(minDistance._2)
       _targetAsh = false
-      _targetHuman = minDistance._2
     }
-
   }
 
   def updateDistanceToTarget = {_distanceToTarget = getDistance(_target)}

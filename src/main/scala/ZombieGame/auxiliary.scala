@@ -24,21 +24,41 @@ trait Movement {
     sqrt(dX * dX + dY * dY)
   }
 
+  def moveStepDistance: (Int, Int) = {
+    val v = (target._1-x, target._2-y)
+    val normV = sqrt(v._1*v._1 + v._2*v._2)
+    val u = (v._1/normV, v._2/normV)
+
+    val newX = (x + u._1*stepSize).toInt
+    val newY = (y + u._2*stepSize).toInt
+
+    (newX, newY)
+  }
+
+
   // Move in direction of the nearest target
   def moveToTarget = {
     // Check if distance is near enough to the target
+    val oldX = x
+    val oldY = y
+
     if (distanceToTarget <= stepSize) {
       x_(target._1)
       y_(target._2)
     }
     else if (distanceToTarget > stepSize) {
-      val distanceRatio = stepSize/distanceToTarget
-      x_(round((1-distanceRatio)*x + distanceRatio*target._1).toInt)
-      y_(round((1-distanceRatio)*y + distanceRatio*target._2).toInt)
+      val newCoords = moveStepDistance
+      x_(newCoords._1)
+      y_(newCoords._2)
     }
     else {
-      throw new Exception("An error occured. This is not suposed to happen")
+      throw new Exception("An error occurred. This is not supposed to happen")
     }
+
+    // Assert that the movement distance is not longer than the step size
+    assert(round(getDistance((oldX, oldY))) <= stepSize+1, s"Distance Traveled: ${getDistance((oldX, oldY))}  | stepSize: $stepSize")
+
+    // Update the distance to target with the new location
     updateDistanceToTarget
   }
 }

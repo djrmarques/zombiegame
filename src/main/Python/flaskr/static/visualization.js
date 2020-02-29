@@ -1,4 +1,4 @@
-const width = 500;
+const width = 700;
 const height = 500;
 
 // Store game Json

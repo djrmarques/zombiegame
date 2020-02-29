@@ -94,4 +94,25 @@ class ZombieTest extends FunSuite with BeforeAndAfter {
     ZombieHorde.killHumans
     assert(HumanPopulation.nAlive == 0)
   }
+
+  /* Test the distance method on the Zombies*/
+
+  test("testMoveStepDistance"){
+    val z = new Zombie(0, 0, 0)
+    val h1 = new Human(0, 0, z.stepSize*2)
+    z.setHumanTarget(h1)
+    val newCoords = z.moveStepDistance
+    print(newCoords)
+    assert(newCoords._2 == z.stepSize)
+  }
+
+  test("testMoveStep"){
+    val z = new Zombie(0, 0, 0)
+    val h1 = new Human(0, 0, z.stepSize*2)
+    z.setHumanTarget(h1)
+    assert(z.target == (0, z.stepSize*2))
+    z.moveToTarget
+    assert(z.target == (0, z.stepSize*2))
+    assert(z.y == z.stepSize)
+  }
 }
