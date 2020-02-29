@@ -1,3 +1,24 @@
+const ratioX = width / 16000
+const ratioY = height / 9000
+
+// function that outputs 0 if the target is dead, else the radius
+function deadRadius(isDead) {
+    if (isDead === 1) return 0; else return radius
+}
+
+// function that outputs 0 if the the character is dead
+function deadStroke(isDead) {
+    if (isDead === 1) return 0; else return lineStroke
+}
+
+function deadText(isDead) {
+    if (isDead === 1) return 0; else return fontSize;
+}
+
+function isDead(isDead, value) {
+    if (isDead === 1) return 0; else return value;
+}
+
 // Creates the d3 svg objects and the svg element
 function createPos(turnData, selectName, fill, attackRange) {
 
@@ -43,6 +64,35 @@ function createPos(turnData, selectName, fill, attackRange) {
             .attr("opacity", "0.5")
             .attr("stroke-width", lineStroke)
             .attr("class", selectName + "Line")
+
+        // /* Draw the range */
+        svg.selectAll(selectName)
+            .data(turnData[selectName])
+            .enter()
+            .append("ellipse")
+            .attr("cx", function (d) {
+                return x(d["posX"]);
+            })
+            .attr("cy", function (d) {
+                return y(d["posY"]);
+            })
+            .attr("fill", fill)
+            .attr("opacity", 0.3)
+            .attr("class", selectName + "Attack")
+            .attr("rx", function (d) {
+                if (selectName != "Ash") {
+                    return attackRange * ratioX;
+                } else {
+                    return isDead(d["isDead"], attackRange * ratioX);
+                }
+            })
+            .attr("ry", function (d) {
+                if (selectName == "Ash") {
+                    return attackRange * ratioY;
+                } else {
+                    return isDead(d["isDead"], attackRange * ratioY);
+                }
+            })
     }
 
     if (selectName == "zombies" || selectName == "humans") {
@@ -51,10 +101,10 @@ function createPos(turnData, selectName, fill, attackRange) {
             .enter()
             .append("text")
             .attr("x", function (d) {
-                return x(d["posX"])-radius/2;
+                return x(d["posX"]) - radius / 2;
             })
             .attr("y", function (d) {
-                return y(d["posY"])+radius/2;
+                return y(d["posY"]) + radius / 2;
             })
             .text(function (d) {
                 return d["id"];
@@ -66,7 +116,7 @@ function createPos(turnData, selectName, fill, attackRange) {
     printStatus(turnData)
 }
 
-function updatePos(turn, turnData, selectName, fill) {
+function updatePos(turn, turnData, selectName, fill, attackRange) {
 
     // Print the position of everyone on the window
 
@@ -106,19 +156,47 @@ function updatePos(turn, turnData, selectName, fill) {
             .attr("stroke-width", function (d) {
                 return deadStroke(d["isDead"])
             })
+
+        // /* Draw the range */
+        svg.selectAll("." + selectName + "Attack")
+            .data(turnData[selectName])
+            .transition().duration(duration)
+            .attr("cx", function (d) {
+                return x(d["posX"]);
+            })
+            .attr("cy", function (d) {
+                return y(d["posY"]);
+            })
+            .attr("fill", fill)
+            .attr("opacity", 0.3)
+            .attr("class", selectName + "Attack")
+            .attr("rx", function (d) {
+                if (selectName != "Ash") {
+                    return attackRange * ratioX;
+                } else {
+                    return isDead(d["isDead"], attackRange * ratioX);
+                }
+            })
+            .attr("ry", function (d) {
+                if (selectName == "Ash") {
+                    return attackRange * ratioY;
+                } else {
+                    return isDead(d["isDead"], attackRange * ratioY);
+                }
+            })
     }
 
     if (selectName == "zombies" || selectName == "humans") {
-        svg.selectAll("."+selectName + "Text")
+        svg.selectAll("." + selectName + "Text")
             .data(turnData[selectName])
             .transition().duration(duration)
             .attr("x", function (d) {
-                return x(d["posX"])-radius/2;
+                return x(d["posX"]) - radius / 2;
             })
             .attr("y", function (d) {
-                return y(d["posY"])+radius/2;
+                return y(d["posY"]) + radius / 2;
             })
-            .attr("font-size", function(d) {
+            .attr("font-size", function (d) {
                 return deadText(d["isDead"]);
             })
     }

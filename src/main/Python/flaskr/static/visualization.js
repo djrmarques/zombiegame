@@ -29,21 +29,6 @@ const fontSize = 10
 // Variable with the turn
 var turn = 0;
 
-// function that outputs 0 if the target is dead, else the radius
-function deadRadius(isDead) {
-    if (isDead === 1) return 0; else return radius
-}
-
-// function that outputs 0 if the the character is dead
-function deadStroke(isDead) {
-    if (isDead === 1) return 0; else return lineStroke
-}
-
-function deadText(isDead){
-    if (isDead === 1) return 0; else return fontSize;
-}
-
-
 // Run the create SVG function when the page fully loads
 function createSVG() {
     let svg = d3.select("#game-viz").append("svg")
@@ -102,13 +87,13 @@ function plotTurn(turn) {
 
 
     /* Zombie location */
-    updatePos(turn, turnData, "zombies", zombiePos);
+    updatePos(turn, turnData, "zombies", zombiePos, 400);
 
     /* Ash location */
-    updatePos(turn, turnData, "Ash", ashPos);
+    updatePos(turn, turnData, "Ash", ashPos, 2000);
 
     /* Human location */
-    updatePos(turn, turnData, "humans", humanPos);
+    updatePos(turn, turnData, "humans", humanPos, 0);
 
 }
 
