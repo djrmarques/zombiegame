@@ -131,6 +131,8 @@ function createPos(turnData, selectName, fill, attackRange) {
             .attr("class", selectName + "Text")
             .attr("font-size", fontSize)
     }
+
+    printStatus(turnData)
 }
 
 
@@ -242,9 +244,6 @@ function printStatus(turnData){
     // console.log(turnData);
     // console.log(turnData);
 
-    // Reset the content of the status
-    $("#status-log").content = "";
-
     const reducer = (acc, item) => {return acc + item};
 
     // Empty the previous logs
@@ -253,7 +252,7 @@ function printStatus(turnData){
     // Print Ash status
     let ashStats = turnData["Ash"][0];
     let ashString = Object.keys(ashStats).map(d => {return d + ": " + ashStats[d] + " | "}).reduce(reducer, "");
-    $("#status-log").append("ASH: " + ashString);
+    $("#status-log").append("<p> Ash: " + ashString + "<p>");
 
     let i;
     for (i=0; i<turnData["zombies"].length; i++){
