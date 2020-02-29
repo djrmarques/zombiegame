@@ -46,7 +46,7 @@ object ZombieGame extends App {
 
 
     // Start game loop
-    while (nTurn < 20 && !endGameFlag) {
+    while (nTurn < 50 && !endGameFlag) {
       nTurn += 1
       ZombieHorde.moveZombies
 
