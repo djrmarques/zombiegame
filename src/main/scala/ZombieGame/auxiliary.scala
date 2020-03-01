@@ -51,7 +51,7 @@ trait Movement {
       y_(newCoords._2)
     }
     else {
-      throw new Exception("An error occurred. This is not supposed to happen")
+      throw new Exception(s"An error occurred. distanceToTarget: $distanceToTarget | stepSize: $stepSize")
     }
 
     // Assert that the movement distance is not longer than the step size

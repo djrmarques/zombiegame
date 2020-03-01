@@ -50,7 +50,9 @@ class Cluster(val pointsList: List[(Int, Int)], val maxNClusters: Int) {
   def getBestFit(results: Seq[ClusterResult]): ClusterResult = {
     val diffedFitness = improvementRate(results sortBy  (_.fitness) map (_.fitness))
     val zipped = diffedFitness zip results
-    (zipped filter (_._1 < fitStopCriteria) minBy (_._1))._2
+    val filtered = zipped filter (_._1 < fitStopCriteria)
+    if (filtered.isEmpty) results.head
+    else (filtered minBy (_._1))._2
   }
 
   /*  Calls fit cluster with a number of different  cluster Number*/
