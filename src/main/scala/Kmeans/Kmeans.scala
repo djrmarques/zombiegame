@@ -5,7 +5,7 @@ import scala.math.{abs, sqrt}
 
 class Cluster(val pointsList: List[(Int, Int)], val maxNClusters: Int) {
 
-  class ClusterResult(val clusterPoints: List[(Int, Int)], val fitness: Int)
+  class ClusterResult(val clusterPoints: List[(Int, Int)], val fitness: Int){val nClusters = clusterPoints.length}
 
   private val _intitialFitness = 10000000
   val improvementRate = 1  // Minimum  fitness improvement
@@ -39,11 +39,20 @@ class Cluster(val pointsList: List[(Int, Int)], val maxNClusters: Int) {
     clusterPoints minBy ((cPoint: (Int, Int)) => distance(point._1, cPoint._1, point._2, cPoint._2))
   }
 
+  def diff(intList: Seq[Int]): Seq[Int] = {
+    val diffedList = for (i <- 1 until intList.length) yield {intList(i) - intList(i-1)}
+    intList.head +: diffedList
+  }
+
+  def getBestFit(results: Seq[ClusterResult]): ClusterResult = {
+    results minBy  (_.fitness)
+  }
+
   /*  Calls fit cluster with a number of different  cluster Number*/
   def fit = {
     val results: Seq[ClusterResult] =
       (1 to maxNClusters) map ((nClusters: Int) => fitCluster(pointsList.take(nClusters), _intitialFitness))
-    val bestFit: ClusterResult = results minBy (_.fitness)
+    val bestFit: ClusterResult = getBestFit(results)
 
     _fitness = bestFit.fitness
     _clusterPoints = bestFit.clusterPoints
@@ -79,9 +88,6 @@ class Cluster(val pointsList: List[(Int, Int)], val maxNClusters: Int) {
 }
 
 object Kmeans {
-
-
-
   def solve(pointsList: List[(Int, Int)], maxNClusters: Int): List[(Int, Int)] = {
     val cluster: Cluster = new Cluster(pointsList, maxNClusters)
     cluster.fit
