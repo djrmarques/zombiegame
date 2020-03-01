@@ -3,9 +3,12 @@ package Kmeans
 import scala.annotation.tailrec
 import scala.math.{abs, sqrt}
 
-class Cluster(val pointsList: List[(Int, Int)], val maxNClusters: Int) {
+class ClusterResult(val clusterPoints: List[(Int, Int)], val fitness: Int, nPointsPerCluster: Map[(Int, Int), Int]){
+  val nClusters = clusterPoints.length
+  val nPoinsPerCluster: List[Int] = clusterPoints map (nPointsPerCluster(_))
+}
 
-  class ClusterResult(val clusterPoints: List[(Int, Int)], val fitness: Int){val nClusters = clusterPoints.length}
+class Cluster(val pointsList: List[(Int, Int)], val maxNClusters: Int) {
 
   private val _intitialFitness = 10000000
   val improvementRate = 1  // Minimum  fitness improvement
@@ -39,19 +42,19 @@ class Cluster(val pointsList: List[(Int, Int)], val maxNClusters: Int) {
     clusterPoints minBy ((cPoint: (Int, Int)) => distance(point._1, cPoint._1, point._2, cPoint._2))
   }
 
-  def diff(intList: Seq[Int]): Seq[Int] = {
-    val diffedList = for (i <- 1 until intList.length) yield {1-(intList(i)/intList(i-1))}
+  def improvementRate(intList: Seq[Int]): Seq[Int] = {
+    val diffedList = for (i <- 1 until intList.length) yield { 1 - (intList(i) / intList(i - 1)) }
     intList.head +: diffedList
   }
 
   def getBestFit(results: Seq[ClusterResult]): ClusterResult = {
-    val diffedFitness = diff(results sortBy  (_.fitness) map (_.fitness))
+    val diffedFitness = improvementRate(results sortBy  (_.fitness) map (_.fitness))
     val zipped = diffedFitness zip results
     (zipped filter (_._1 < fitStopCriteria) minBy (_._1))._2
   }
 
   /*  Calls fit cluster with a number of different  cluster Number*/
-  def fit = {
+  def fit: ClusterResult = {
     val results: Seq[ClusterResult] =
       (1 to maxNClusters) map ((nClusters: Int) => fitCluster(pointsList.take(nClusters), _intitialFitness))
     val bestFit: ClusterResult = getBestFit(results)
@@ -59,6 +62,8 @@ class Cluster(val pointsList: List[(Int, Int)], val maxNClusters: Int) {
     _fitness = bestFit.fitness
     _clusterPoints = bestFit.clusterPoints
     _nClusters = _clusterPoints.length
+
+    bestFit
   }
 
   /* Fit the cluster with a given number of cluster */
@@ -69,10 +74,10 @@ class Cluster(val pointsList: List[(Int, Int)], val maxNClusters: Int) {
 
     // Calculate the fitness(And stop criteria)
     val newFitness = getFitness(pointsList, assignedClusters)
+    val zippedAssignedClusters = assignedClusters zip pointsList
     if (abs(newFitness - bestFitness) > fitStopCriteria) {
 
       // Create new clusters centers
-      val zippedAssignedClusters = assignedClusters zip pointsList
       val newClusters: List[(Int, Int)] = for (clusterPoint <- clusterPoints) yield {
         meanPoint(zippedAssignedClusters filter (_._1 == clusterPoint) map (_._2))
       }
@@ -80,7 +85,10 @@ class Cluster(val pointsList: List[(Int, Int)], val maxNClusters: Int) {
       // Call fitCluster again
       fitCluster(newClusters, newFitness)
     }
-    else new ClusterResult(clusterPoints, newFitness)
+    else {
+      val nPointsPerCluster: Map[(Int, Int), Int] = zippedAssignedClusters groupBy (_._1) map {case (k, v) => k -> (v.length-1)}
+      new ClusterResult(clusterPoints, newFitness, nPointsPerCluster)
+    }
   }
 
   // Getter methods
@@ -90,9 +98,8 @@ class Cluster(val pointsList: List[(Int, Int)], val maxNClusters: Int) {
 }
 
 object Kmeans {
-  def solve(pointsList: List[(Int, Int)], maxNClusters: Int): List[(Int, Int)] = {
+  def solve(pointsList: List[(Int, Int)], maxNClusters: Int): ClusterResult = {
     val cluster: Cluster = new Cluster(pointsList, maxNClusters)
     cluster.fit
-    cluster.clusterPoints
   }
 }

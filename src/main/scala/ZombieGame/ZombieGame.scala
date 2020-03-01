@@ -2,28 +2,76 @@ package ZombieGame
 import java.io.{File, PrintWriter}
 import java.util.Calendar
 import java.text.SimpleDateFormat
+
 import io.circe.syntax._
+
+import scala.math.{sqrt, ceil, max}
+import Kmeans.{Kmeans, ClusterResult}
 
 object ZombieGame extends App {
 
   Ash.setLocation(0, 0)
   Ash.setTarget(mapWidth/2, mapHeight/2)
 
-  val t0 = System.nanoTime()
-  val coordsList: Seq[(Int, Int)] = for (i <- 0 until mapWidth; l <- 0 until mapHeight) yield {(i, l)}
-  val t1 = System.nanoTime()
-  println("Elapsed time: " + (t1 - t0) + "ns")
-
-  def decisionInput: Map[String, List[(Int, Int)]] = {
+  def decisionInput = {
     val zombieList: List[(Int, Int)] = ZombieHorde.locationList
     val humanList: List[(Int, Int)] = HumanPopulation.locationList
-    Map("zombies"->zombieList, "humans"-> humanList)
+    val (newX, newY) = makeDecision(Ash.location, zombieList, humanList)
+    Ash.setTarget(newX, newY)
   }
 
-//  def makeDecision(infoMap: Map[String, List[(Int, Int)]]): Unit ={
-//    val zList = infoMap["zombies"]
-//    val hList = infoMap["humans"]
-//  }
+  /* Compute distance between two points*/
+  def distance(x1: Int, x2: Int, y1: Int, y2: Int): Double = {
+    val dx = x1-x2
+    val dy = y1-y2
+    sqrt(dx*dx+dy*dy)
+  }
+
+  def nearestZombie(hLocation: (Int, Int), zombies: List[(Int, Int)]): Int = {
+    (zombies map (zLoc => distance(hLocation._1, zLoc._1, hLocation._2, zLoc._2))).min.toInt
+  }
+
+  def makeDecision(ashPos: (Int, Int), zombies: List[(Int, Int)], humans: List[(Int, Int)]): (Int, Int) =  {
+
+    /* Zombies clusters */
+    val nZombies = zombies.length
+    val nClusters = max(nZombies-1, 1)
+    var zombieCoords: (Int, Int) = zombies.head
+    if (nZombies > 1) {
+      val clusterResult: ClusterResult = Kmeans.solve(zombies, nClusters)
+      val clusterPoints = clusterResult.clusterPoints
+      val clusterTurnsToAsh: List[Int] = (clusterPoints map (cPos => distance(cPos._1, ashPos._1, cPos._2, ashPos._2) / 2000)) map (ceil(_).toInt)
+      val clusterWeights: Seq[Double] = (0 until clusterTurnsToAsh.length) map (p => clusterResult.nPoinsPerCluster(p) / clusterTurnsToAsh(p))
+      val totalWeight: Double = clusterWeights reduce (_ + _)
+      val ZNormalizedWeights = clusterWeights map (_ / totalWeight)
+      zombieCoords = (0 until clusterPoints.length) map (i => {
+        val x = clusterPoints(i)._1
+        val y = clusterPoints(i)._2
+        val weight = ZNormalizedWeights(i)
+        ((x * weight).toInt, (y * weight).toInt)
+      }) reduce ((acc, v) => (acc._1 + v._1, acc._2 + v._2))
+    }
+
+    // Calculate the nearest zombie distance
+    val humanTurnsToZombie: List[Int] = humans map (nearestZombie(_, zombies)/400) map (ceil(_).toInt)
+    val humanTurnsToAsh = humans map (hLoc => distance(hLoc._1, ashPos._1, hLoc._2, ashPos._2)/2000) map (ceil(_).toInt)
+    val humanWeights = (0 until humans.length) map (i => humanTurnsToAsh(i) - humanTurnsToZombie(i))
+    val totalHumanWeight = humanWeights map (max(0, _)) reduce (_ + _)
+    val HNormalizedWeights = humanWeights map (_/totalHumanWeight)
+    val humanCoords = (0 until humans.length) map (i => {
+      val x = humans(i)._1
+      val y = humans(i)._2
+      val weight = HNormalizedWeights(i)
+      (x*weight, y*weight)
+    }) reduce ((acc, v) => (acc._1 + v._1, acc._2 + v._2))
+
+    val humanFactor: Int = {
+      val minFactor: Int = humanWeights.min
+      if (minFactor < 0 || minFactor > 0) 1
+      else {99}
+    }
+    ((zombieCoords._1+humanCoords._1*humanFactor)/(humanFactor+1), (zombieCoords._2+humanCoords._2*humanFactor)/(humanFactor+1))
+  }
 
   /* Initialize the game instance randomly */
   def randomInitializeInstance(nHumans: Int, nZombies: Int): Unit ={
@@ -62,10 +110,12 @@ object ZombieGame extends App {
 
     // Start game loop
     while (nTurn < 50 && !endGameFlag) {
+      println(nTurn)
       nTurn += 1
       ZombieHorde.moveZombies
 
       // Move Ash
+      decisionInput
       Ash.moveToTarget
       Ash.updateDistanceToTarget
 
