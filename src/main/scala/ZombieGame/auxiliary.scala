@@ -35,7 +35,6 @@ trait Movement {
     (newX, newY)
   }
 
-
   // Move in direction of the nearest target
   def moveToTarget = {
     // Check if distance is near enough to the target
@@ -98,4 +97,6 @@ class Generation {
   }
 
   def popStatus = population map (_.status)
+
+  def locationList = population filter (!_.isDead) map (_.location)
 }

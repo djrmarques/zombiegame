@@ -9,6 +9,22 @@ object ZombieGame extends App {
   Ash.setLocation(0, 0)
   Ash.setTarget(mapWidth/2, mapHeight/2)
 
+  val t0 = System.nanoTime()
+  val coordsList: Seq[(Int, Int)] = for (i <- 0 until mapWidth; l <- 0 until mapHeight) yield {(i, l)}
+  val t1 = System.nanoTime()
+  println("Elapsed time: " + (t1 - t0) + "ns")
+
+  def decisionInput: Map[String, List[(Int, Int)]] = {
+    val zombieList: List[(Int, Int)] = ZombieHorde.locationList
+    val humanList: List[(Int, Int)] = HumanPopulation.locationList
+    Map("zombies"->zombieList, "humans"-> humanList)
+  }
+
+//  def makeDecision(infoMap: Map[String, List[(Int, Int)]]): Unit ={
+//    val zList = infoMap["zombies"]
+//    val hList = infoMap["humans"]
+//  }
+
   /* Initialize the game instance randomly */
   def randomInitializeInstance(nHumans: Int, nZombies: Int): Unit ={
     // Initialize the Human and Zombie population
@@ -51,6 +67,7 @@ object ZombieGame extends App {
 
       // Move Ash
       Ash.moveToTarget
+      Ash.updateDistanceToTarget
 
       // Kill all zombies and get score
       Ash.getScore
