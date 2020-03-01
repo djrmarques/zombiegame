@@ -36,15 +36,8 @@ class KmeansTest extends FunSuite {
     assert(res == 100.0)
   }
 
-  test("testDiff"){
-    val cluster = new Cluster(listPoints, 2)
-    val res = cluster.diff(List(10, 2, 3, 4, 5, 6, 7, 8))
-    assert(res == List(10, -8, 1, 1, 1, 1, 1, 1))
-
-  }
-
   test("testFit"){
-    val cluster = new Cluster(listPoints, 20)
+    val cluster = new Cluster(listPoints, 10)
     val t0 = System.nanoTime()
     cluster.fit
     val t1 = System.nanoTime()

@@ -9,7 +9,7 @@ class Cluster(val pointsList: List[(Int, Int)], val maxNClusters: Int) {
 
   private val _intitialFitness = 10000000
   val improvementRate = 1  // Minimum  fitness improvement
-  val fitStopCriteria = 10  // Minimum  fitness improvement
+  val fitStopCriteria = 0.1  // Minimum  fitness improvement
 
   // These will be set after the fit method
   private var _fitness = 0
@@ -40,12 +40,14 @@ class Cluster(val pointsList: List[(Int, Int)], val maxNClusters: Int) {
   }
 
   def diff(intList: Seq[Int]): Seq[Int] = {
-    val diffedList = for (i <- 1 until intList.length) yield {intList(i) - intList(i-1)}
+    val diffedList = for (i <- 1 until intList.length) yield {1-(intList(i)/intList(i-1))}
     intList.head +: diffedList
   }
 
   def getBestFit(results: Seq[ClusterResult]): ClusterResult = {
-    results minBy  (_.fitness)
+    val diffedFitness = diff(results sortBy  (_.fitness) map (_.fitness))
+    val zipped = diffedFitness zip results
+    (zipped filter (_._1 < fitStopCriteria) minBy (_._1))._2
   }
 
   /*  Calls fit cluster with a number of different  cluster Number*/
