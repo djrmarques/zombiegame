@@ -16,7 +16,7 @@ class ZombieGameTest extends FunSuite {
     )
 
     val t0 = System.nanoTime()
-    val res = ZombieGame.makeDecision(ashPos, zombies, humans)
+    val res = DecisionMaker.makeDecision(ashPos, zombies, humans)
     val t1 = System.nanoTime()
     val elapsedTime = (t1 - t0)/pow(10, 9)
     println("Elapsed time: " + elapsedTime + "s")
@@ -46,7 +46,7 @@ class ZombieGameTest extends FunSuite {
     )
 
     val t0 = System.nanoTime()
-    val res = ZombieGame.makeDecision(ashPos, zombies, humans)
+    val res = DecisionMaker.makeDecision(ashPos, zombies, humans)
     val t1 = System.nanoTime()
     val elapsedTime = (t1 - t0)/pow(10, 9)
     println("Elapsed time: " + elapsedTime + "s")
