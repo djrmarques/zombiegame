@@ -12,7 +12,7 @@ class Cluster(val pointsList: List[(Int, Int)], val maxNClusters: Int) {
 
   private val _intitialFitness = 10000000
   val improvementRate = 1  // Minimum  fitness improvement
-  val fitStopCriteria = 0.1  // Minimum  fitness improvement
+  val fitStopCriteria = 0.01  // Minimum  fitness improvement
 
   // These will be set after the fit method
   private var _fitness = 0

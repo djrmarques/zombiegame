@@ -57,11 +57,14 @@ object DecisionMaker {
       else {99.0}
     }
 
-    val newX: Double= (zombieCoords._1.toDouble+humanCoords._1.toDouble*humanFactor)/(humanFactor+1.0)
-    val newY: Double = (zombieCoords._2.toDouble+humanCoords._2.toDouble*humanFactor)/(humanFactor+1.0)
+    val zombieFactor = 50.0
+    val totalWeight = zombieFactor + humanFactor
 
+    val newX: Double= (zombieCoords._1.toDouble*zombieFactor+humanCoords._1.toDouble*humanFactor)/totalWeight
+    val newY: Double = (zombieCoords._2.toDouble*zombieFactor+humanCoords._2.toDouble*humanFactor)/totalWeight
+
+    println(newX.toInt, newY.toInt)
     (newX.toInt, newY.toInt)
-
   }
 
 }
