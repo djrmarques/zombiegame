@@ -58,7 +58,6 @@ object ZombieGame {
 
     // Start game loop
     while (nTurn < turnLim && !endGameFlag) {
-      println(nTurn)
       nTurn += 1
       ZombieHorde.moveZombies
 

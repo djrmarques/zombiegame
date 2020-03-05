@@ -48,7 +48,6 @@ trait Movement {
     else if (distanceToTarget > stepSize) {
       val newCoords = moveStepDistance
       x_(newCoords._1)
-      y_(newCoords._2)
     }
     else {
       throw new Exception(s"An error occurred. distanceToTarget: $distanceToTarget | stepSize: $stepSize")
