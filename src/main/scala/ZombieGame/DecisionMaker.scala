@@ -54,10 +54,9 @@ object DecisionMaker {
     val humanFactor: Double = {
       val minFactor: Int = humanWeights.min
       if (minFactor < 0 || minFactor > 1) 1.0
-      else {99.0}
+      else {500}
     }
-
-    val zombieFactor = 50.0
+    val zombieFactor = 10.0
     val totalWeight = zombieFactor + humanFactor
 
     val newX: Double= (zombieCoords._1.toDouble*zombieFactor+humanCoords._1.toDouble*humanFactor)/totalWeight
