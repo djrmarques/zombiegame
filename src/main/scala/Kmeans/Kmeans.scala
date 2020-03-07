@@ -75,18 +75,20 @@ class Cluster(val pointsList: List[(Int, Int)], val maxNClusters: Int) {
   /* Fit the cluster with a given number of cluster */
   @tailrec
   final def fitCluster(clusterPoints: List[(Int, Int)], bestFitness: Int): ClusterResult =  {
-    //Assign points to the nearest cluster
+
+    //Assign points to the nearest cluster, considering that there may be two or more clusters within the same distance
     val assignedClusters: List[(Int, Int)] = pointsList map ((p: (Int, Int)) => nearestCluster(p, clusterPoints))
 
     // Calculate the fitness(And stop criteria)
     val newFitness = getFitness(pointsList, assignedClusters)
     val zippedAssignedClusters = assignedClusters zip pointsList
-    if (abs(newFitness - bestFitness) > fitStopCriteria) {
+      if (abs(newFitness - bestFitness ) > fitStopCriteria ) {
 
-      // Create new clusters centers
-      val newClusters: List[(Int, Int)] = for (clusterPoint <- clusterPoints) yield {
-        meanPoint(zippedAssignedClusters filter (_._1 == clusterPoint) map (_._2))
-      }
+
+    // Create new clusters centers
+    val newClusters: List[(Int, Int)] = for (clusterPoint <- assignedClusters.distinct) yield {
+      meanPoint(zippedAssignedClusters filter (_._1 == clusterPoint) map (_._2))
+    }
 
       // Call fitCluster again
       fitCluster(newClusters, newFitness)

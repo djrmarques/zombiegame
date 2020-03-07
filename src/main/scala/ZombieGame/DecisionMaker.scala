@@ -1,8 +1,8 @@
 package ZombieGame
 
-import Kmeans.{ClusterResult, Kmeans}
+import Kmeans.{Kmeans}
 
-import scala.math.{abs, ceil, max, sqrt}
+import scala.math.{abs, ceil, min}
 
 object DecisionMaker {
 
@@ -28,7 +28,7 @@ object DecisionMaker {
 
     /* Zombies clusters */
     val nZombies = zombies.distinct.length
-    val nClusters = max(nZombies-1, 1)
+    val nClusters = min(nZombies, 4)
 
     // Only run clustering with more than one zombie
     var zombieCoords: (Int, Int) = zombies.head
@@ -37,7 +37,7 @@ object DecisionMaker {
 
     // For each Human calculate the nearest zombie distance
     val humanTurnsToZombie: List[Int] = humans map (nearestZombie(_, zombies)/zombieStepSize*2) map (ceil(_).toInt)
-    val humanTurnsToAsh: List[Int] = humans map (hLoc => distance(hLoc._1, ashPos._1, hLoc._2, ashPos._2)/ashStepSize*2)
+    val humanTurnsToAsh: List[Int] = humans map (hLoc => distance(hLoc._1, ashPos._1, hLoc._2, ashPos._2)/ashStepSize)
     val humanWeights = (0 until humans.length) map (i => abs(humanTurnsToZombie(i) - humanTurnsToAsh(i)))
 
     // Check if there is a human at risk
