@@ -29,8 +29,11 @@ class Cluster(val pointsList: List[(Int, Int)], val maxNClusters: Int) {
 
   /* Mean of the cluster points */
   def meanPoint(points: List[(Int, Int)]): (Int, Int) = {
-    val summed = points reduce ((acc, v) => (acc._1 + v._1, acc._2 + v._2))
-    (summed._1/points.length, summed._2/points.length)
+    if (points.isEmpty) throw new Exception("This cannot be empty")
+    else {
+      val summed = points reduce ((acc, v) => (acc._1 + v._1, acc._2 + v._2))
+      (summed._1 / points.length, summed._2 / points.length)
+    }
   }
 
   /* Calculate the fitness of the current cluster */
