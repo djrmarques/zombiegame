@@ -6,6 +6,7 @@ import scala.math.{abs, sqrt}
 class ClusterResult(val clusterPoints: List[(Int, Int)], val fitness: Int, nPointsPerCluster: Map[(Int, Int), Int]){
   val nClusters = clusterPoints.length
   val nPoinsPerCluster: List[Int] = clusterPoints map (nPointsPerCluster(_))
+  val clusterMorePoints: (Int, Int) = ((clusterPoints zip nPoinsPerCluster) maxBy (_._2))._1
 }
 
 class Cluster(val pointsList: List[(Int, Int)], val maxNClusters: Int) {
