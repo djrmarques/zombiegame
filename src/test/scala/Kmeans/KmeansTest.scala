@@ -47,4 +47,11 @@ class KmeansTest extends FunSuite {
     println(cluster.fitness)
     assert(elapsedTime < 0.2)
   }
+
+  test("testFitCluster"){
+    val listPoints: List[(Int, Int)] = List((1000,8400), (2000,7800), (3000,7200), (4000,6600), (5000,6000), (6000,5400), (9000,3600), (10000,3000), (11000,2400), (12000,1800), (13000,1200), (14000,600), (14000,8400), (13000,7800), (12000,7200), (11000,6600), (10000,6000), (9000,5400), (6000,3600), (5000,3000), (4000,2400), (3000,1800), (2000,1200))
+    val cluster = new Cluster(listPoints, listPoints.length-1)
+    cluster.fit
+  }
+
 }
