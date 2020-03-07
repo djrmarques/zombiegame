@@ -38,10 +38,10 @@ object DecisionMaker {
     // For each Human calculate the nearest zombie distance
     val humanTurnsToZombie: List[Int] = humans map (nearestZombie(_, zombies)/zombieStepSize*2) map (ceil(_).toInt)
     val humanTurnsToAsh: List[Int] = humans map (hLoc => distance(hLoc._1, ashPos._1, hLoc._2, ashPos._2)/ashStepSize*2)
-    val humanWeights = (0 until humans.length) map (i => abs(humanTurnsToAsh(i) - humanTurnsToZombie(i)))
+    val humanWeights = (0 until humans.length) map (i => abs(humanTurnsToZombie(i) - humanTurnsToAsh(i)))
 
     // Check if there is a human at risk
-    if (humanWeights.min < 2) {moveCoords = ((humans zip humanWeights) minBy (_._2))._1}
+    if ((humanWeights filter (_ >= 0)).min <= 2) {moveCoords = ((humans zip humanTurnsToZombie) minBy (_._2))._1}
     else moveCoords = zombieCoords
 
     (moveCoords._1, moveCoords._2)
