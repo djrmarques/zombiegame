@@ -10,8 +10,9 @@ object Trainer extends App{
   val nZombies = 10
   val nHumans = 5
   val nTurns = 50
+  val gameParams = Map("Something" -> 1.0)
 
-  val fitness = runGameInstance(nZombies, nHumans, nTurns)
+  val fitness = runGameInstance(nZombies, nHumans, nTurns, gameParams)
   println(fitness)
 
 }

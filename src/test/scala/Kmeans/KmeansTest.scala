@@ -45,6 +45,6 @@ class KmeansTest extends FunSuite {
     println("Elapsed time: " + elapsedTime + "s")
     println(cluster.clusterPoints)
     println(cluster.fitness)
-    assert(elapsedTime < 0.1)
+    assert(elapsedTime < 0.2)
   }
 }
