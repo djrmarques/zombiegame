@@ -36,8 +36,8 @@ object DecisionMaker {
     if (nZombies > 1) zombieCoords = Kmeans.solve(zombies, nClusters).clusterMorePoints
 
     // For each Human calculate the nearest zombie distance
-    val humanTurnsToZombie: List[Int] = humans map (nearestZombie(_, zombies)/zombieStepSize*2) map (ceil(_).toInt)
-    val humanTurnsToAsh: List[Int] = humans map (hLoc => distance(hLoc._1, ashPos._1, hLoc._2, ashPos._2)/ashStepSize)
+    val humanTurnsToZombie: List[Int] = humans map (nearestZombie(_, zombies)/zombieStepSize) map (ceil(_).toInt)
+    val humanTurnsToAsh: List[Int] = humans map (hLoc => (distance(hLoc._1, ashPos._1, hLoc._2, ashPos._2)/ashStepSize-1))
     val humanWeights = (0 until humans.length) map (i => abs(humanTurnsToZombie(i) - humanTurnsToAsh(i)))
 
     // Check if there is a human at risk
