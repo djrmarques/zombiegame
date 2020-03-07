@@ -6,15 +6,18 @@ import scala.math.{abs, ceil, max, sqrt}
 
 object DecisionMaker {
 
+  val ashStepSize = 1000
+  val zombieStepSize = 400
+
   /* Compute distance between two points*/
-  def distance(x1: Int, x2: Int, y1: Int, y2: Int): Double = {
-    val dx = x1-x2
-    val dy = y1-y2
-    sqrt(dx*dx+dy*dy)
+  def distance(x1: Int, x2: Int, y1: Int, y2: Int): Int = {
+    val dx = abs(x1-x2)
+    val dy = abs(y1-y2)
+    dx+dy
   }
 
   def nearestZombie(hLocation: (Int, Int), zombies: List[(Int, Int)]): Int = {
-    (zombies map (zLoc => distance(hLocation._1, zLoc._1, hLocation._2, zLoc._2))).min.toInt
+    (zombies map (zLoc => distance(hLocation._1, zLoc._1, hLocation._2, zLoc._2))).min
   }
 
   def makeDecision(ashPos: (Int, Int), zombies: List[(Int, Int)], humans: List[(Int, Int)]): (Int, Int) =  {
@@ -26,7 +29,7 @@ object DecisionMaker {
     if (nZombies > 1) {
       val clusterResult: ClusterResult = Kmeans.solve(zombies, nClusters)
       val clusterPoints = clusterResult.clusterPoints
-      val clusterTurnsToAsh: List[Int] = (clusterPoints map (cPos => distance(cPos._1, ashPos._1, cPos._2, ashPos._2) / 2000)) map (ceil(_).toInt)
+      val clusterTurnsToAsh: List[Int] = clusterPoints map (cPos => distance(cPos._1, ashPos._1, cPos._2, ashPos._2)/ashStepSize)
       val clusterWeights: Seq[Double] = (0 until clusterTurnsToAsh.length) map (p => clusterResult.nPoinsPerCluster(p).toDouble / clusterTurnsToAsh(p).toDouble)
       val totalWeight: Double = clusterWeights reduce (_ + _)
       val ZNormalizedWeights = clusterWeights map (_ / totalWeight)
@@ -44,6 +47,7 @@ object DecisionMaker {
     val humanWeights = (0 until humans.length) map (i => abs(humanTurnsToAsh(i) - humanTurnsToZombie(i)))
     val totalHumanWeight = humanWeights map (max(0, _)) reduce (_ + _)
     val HNormalizedWeights = humanWeights map (_/max(totalHumanWeight.toDouble, 1.0))
+
     val humanCoords: (Double, Double) = (0 until humans.length) map (i => {
       val x = humans(i)._1.toDouble
       val y = humans(i)._2.toDouble
